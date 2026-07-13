@@ -1,0 +1,10 @@
+{
+  "name": "edison-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --filter edison-portfolio-frontend dev",
+    "build": "pnpm --filter edison-portfolio-frontend build",
+    "preview": "pnpm --filter edison-portfolio-frontend preview"
+  }
+}

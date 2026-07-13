@@ -1,4 +1,5 @@
 import React from 'react'
+import { useFadeIn } from '../hooks/useScrollSpy'
 
 const skillCategories = [
   { name: 'Frontend', skills: ['HTML5', 'CSS3', 'JavaScript', 'React', 'Vue.js', 'TypeScript', 'Tailwind CSS', 'Vite'] },
@@ -7,13 +8,14 @@ const skillCategories = [
 ]
 
 function Skills({ skills, loading }) {
+  const [setRef, visible] = useFadeIn()
   const getLevel = (name) => {
     const skill = skills.find(s => s.name === name)
     return skill ? skill.level : 0
   }
 
   return (
-    <section id='skills' className='section fade-in'>
+    <section id='skills' ref={setRef} className={`section fade-in${visible ? ' visible' : ''}`}>
       <h2 className='section-title'>Habilidades</h2>
       <div className='skills-categories'>
         {skillCategories.map(cat => (

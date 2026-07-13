@@ -1,8 +1,10 @@
 import React from 'react'
+import { useFadeIn } from '../hooks/useScrollSpy'
 
 function Hero() {
+  const [setRef, visible] = useFadeIn()
   return (
-    <header id='home' className='hero fade-in'>
+    <header id='home' ref={setRef} className={`hero fade-in${visible ? ' visible' : ''}`}>
       <div className='hero-content'>
         <h1>Hola, soy <span className='accent'>Edison Martinez</span></h1>
         <h2>Desarrollador Web Full-Stack</h2>
