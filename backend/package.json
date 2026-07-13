@@ -1,0 +1,21 @@
+{
+  "name": "edison-portfolio-backend",
+  "version": "1.0.0",
+  "description": "Backend del portafolio de Edison Martinez - MERN Stack",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "seed": "node seed.js"
+  },
+  "author": "Edison Martinez",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mongoose": "^8.5.1",
+    "mongodb-memory-server": "^9.4.0"
+  }
+}
