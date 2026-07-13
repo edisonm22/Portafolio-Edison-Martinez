@@ -1,15 +1,21 @@
 import { useState, useEffect } from 'react'
 import { useTheme } from '../context/ThemeContext'
-import { NavLink } from 'react-router-dom'
 
 const navItems = [
-  { path: '/', label: 'Inicio' },
-  { path: '/proyectos', label: 'Proyectos' },
-  { path: '/skills', label: 'Skills' },
-  { path: '/servicios', label: 'Servicios' },
-  { path: '/contacto', label: 'Contacto' },
-  { path: '/cv', label: 'CV' },
+  { id: 'home', label: 'Inicio' },
+  { id: 'projects', label: 'Proyectos' },
+  { id: 'skills', label: 'Skills' },
+  { id: 'services', label: 'Servicios' },
+  { id: 'contact', label: 'Contacto' },
+  { id: 'cv', label: 'CV' },
 ]
+
+function scrollToSection(id: string) {
+  const el = document.getElementById(id)
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth' })
+  }
+}
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -28,24 +34,20 @@ export function Navbar() {
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <NavLink to="/" className="text-xl font-bold text-text-primary hover:text-primary transition-colors" aria-label="Edison Martinez">
+          <a href="#home" className="text-xl font-bold text-text-primary hover:text-primary transition-colors" aria-label="Edison Martinez">
             EM
-          </NavLink>
+          </a>
 
           <div className="hidden md:flex items-center gap-8">
             {navItems.map((item) => (
-              <NavLink
-                key={item.path}
-                to={item.path}
-                className={({ isActive }) =>
-                  `text-sm font-medium transition-colors duration-200 relative ${
-                    isActive ? 'text-primary' : 'text-text-secondary hover:text-primary'
-                  }`
-                }
-                end={item.path === '/'}
+              <a
+                key={item.id}
+                href={`#${item.id}`}
+                onClick={(e) => { e.preventDefault(); scrollToSection(item.id); }}
+                className="text-sm font-medium transition-colors duration-200 relative text-text-secondary hover:text-primary"
               >
                 {item.label}
-              </NavLink>
+              </a>
             ))}
 
             <button
@@ -90,19 +92,14 @@ export function Navbar() {
         >
           <div className="py-4 space-y-2 border-t border-dark-border">
             {navItems.map((item) => (
-              <NavLink
-                key={item.path}
-                to={item.path}
-                onClick={() => setMobileOpen(false)}
-                className={({ isActive }) =>
-                  `block px-4 py-3 rounded-xl text-base font-medium transition-colors ${
-                    isActive ? 'bg-primary/10 text-primary' : 'text-text-secondary hover:bg-dark-card hover:text-primary'
-                  }`
-                }
-                end={item.path === '/'}
+              <a
+                key={item.id}
+                href={`#${item.id}`}
+                onClick={(e) => { e.preventDefault(); scrollToSection(item.id); setMobileOpen(false); }}
+                className="block px-4 py-3 rounded-xl text-base font-medium transition-colors text-text-secondary hover:bg-dark-card hover:text-primary"
               >
                 {item.label}
-              </NavLink>
+              </a>
             ))}
             <button
               onClick={toggleTheme}
