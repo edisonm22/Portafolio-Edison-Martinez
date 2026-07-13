@@ -11,7 +11,7 @@ import CVLayout from './components/CVLayout'
 import { ThemeProvider } from './context/ThemeContext'
 import { useScrollSpy } from './hooks/useScrollSpy'
 
-const API_URL = 'http://127.0.0.1:5000'
+const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:5000'
 
 const SECTION_IDS = ['home', 'projects', 'skills', 'services', 'contact', 'cv']
 
