@@ -1,9 +1,11 @@
 import React from 'react'
+import { useFadeIn } from '../hooks/useScrollSpy'
 
 function Projects({ projects, loading }) {
+  const [setRef, visible] = useFadeIn()
   if (loading) {
     return (
-      <section id='projects' className='section fade-in'>
+      <section id='projects' ref={setRef} className={`section fade-in${visible ? ' visible' : ''}`}>
         <h2 className='section-title'>Mis Proyectos</h2>
         <div className='grid'>
           {[1, 2, 3].map(i => (
@@ -24,7 +26,7 @@ function Projects({ projects, loading }) {
   }
 
   return (
-    <section id='projects' className='section fade-in'>
+    <section id='projects' ref={setRef} className={`section fade-in${visible ? ' visible' : ''}`}>
       <h2 className='section-title'>Mis Proyectos</h2>
       <div className='grid'>
         {projects.length === 0 ? (
