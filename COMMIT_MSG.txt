@@ -1,0 +1,9 @@
+feat: add TypeScript ESLint Prettier Husky Vitest CI/CD
+
+- TypeScript with strict mode
+- ESLint with React hooks and Prettier
+- Prettier formatting
+- Husky pre-commit and commit-msg hooks
+- Commitlint for conventional commits
+- Vitest with React Testing Library
+- GitHub Actions CI workflow

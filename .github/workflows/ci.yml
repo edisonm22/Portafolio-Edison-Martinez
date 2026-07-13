@@ -1,0 +1,54 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: cd frontend && npm ci
+
+      - name: Run lint
+        run: cd frontend && npm run lint
+
+      - name: Run format check
+        run: cd frontend && npm run format:check
+
+      - name: Run typecheck
+        run: cd frontend && npm run typecheck
+
+      - name: Run tests
+        run: cd frontend && npm test
+
+      - name: Build
+        run: cd frontend && npm run build
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v4
+        if: always()
+        with:
+          files: frontend/coverage/lcov.info
+          fail_ci_if_error: false
+
+  deploy-preview:
+    needs: lint-and-test
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy preview
+        run: echo "Deploy preview to Vercel/Netlify here"
