@@ -1,1 +1,1 @@
-Fix ThemeContext: use dark class for Tailwind v4 dark mode
+Fix all styling: complete CSS rewrite with Tailwind v4 + legacy classes for all components
