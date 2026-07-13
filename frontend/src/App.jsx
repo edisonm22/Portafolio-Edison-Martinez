@@ -7,12 +7,13 @@ import Skills from './components/Skills'
 import Services from './components/Services'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
+import CVLayout from './components/CVLayout'
 import { ThemeProvider } from './context/ThemeContext'
 import { useScrollSpy } from './hooks/useScrollSpy'
 
 const API_URL = 'http://127.0.0.1:5000'
 
-const SECTION_IDS = ['home', 'projects', 'skills', 'services', 'contact']
+const SECTION_IDS = ['home', 'projects', 'skills', 'services', 'contact', 'cv']
 
 const FALLBACK_PROJECTS = [
   { _id: '1', title: 'E-commerce Full-Stack', description: 'Tienda en linea completa con carrito, pagos y panel admin usando MERN stack.', technologies: ['React', 'Node.js', 'Express', 'MongoDB'] },
@@ -59,6 +60,7 @@ function AppContent() {
       <Skills skills={skills} loading={loading} />
       <Services />
       <Contact />
+      <CVLayout />
       <Footer />
     </div>
   )

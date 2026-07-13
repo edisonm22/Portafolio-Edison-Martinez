@@ -25,7 +25,8 @@ function Navbar({ activeSection }) {
     { id: 'projects', label: 'Proyectos' },
     { id: 'skills', label: 'Skills' },
     { id: 'services', label: 'Servicios' },
-    { id: 'contact', label: 'Contacto' }
+    { id: 'contact', label: 'Contacto' },
+    { id: 'cv', label: 'CV' }
   ]
 
   return (
