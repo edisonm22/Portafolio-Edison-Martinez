@@ -4,5 +4,4 @@ export const navItems = [
   { id: 'skills', label: 'Skills' },
   { id: 'services', label: 'Servicios' },
   { id: 'contact', label: 'Contacto' },
-  { id: 'cv', label: 'CV' },
 ]
