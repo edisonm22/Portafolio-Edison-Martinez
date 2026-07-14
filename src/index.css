@@ -1,0 +1,129 @@
+@import "tailwindcss";
+
+/* ── Custom Theme Tokens ── */
+@theme {
+  --color-primary: #0ea5e9;
+  --color-accent: #a855f7;
+  --color-surface: #1e293b;
+  --color-border: #2d3a4f;
+  --color-muted: #94a3b8;
+  --color-dark: #0a0f1a;
+  --color-light: #f1f5f9;
+}
+
+/* ── Custom Animations ── */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes pulseGlow {
+  0%,
+  100% {
+    box-shadow: 0 10px 30px rgba(14, 165, 233, 0.4),
+      0 4px 12px rgba(168, 85, 247, 0.2);
+  }
+  50% {
+    box-shadow: 0 15px 40px rgba(14, 165, 233, 0.5),
+      0 6px 16px rgba(168, 85, 247, 0.3);
+  }
+}
+
+/* ── Global Styles ── */
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: #0a0f1a;
+  color: #f1f5f9;
+}
+
+/* ── Utility Classes ── */
+.animate-fade-up {
+  animation: fadeUp 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+.skeleton-line {
+  height: 1rem;
+  background: linear-gradient(90deg, #1e293b, #2d3a4f, #1e293b);
+  background-size: 200% 100%;
+  border-radius: 0.25rem;
+  animation: shimmer 1.5s infinite;
+}
+
+.cv-inner {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  max-width: 1300px;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+.cv-sidebar {
+  background: #111827;
+  border-right: 1px solid #2d3a4f;
+  padding: 1.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  position: sticky;
+  top: 5rem;
+  max-height: calc(100vh - 5rem);
+  overflow-y: auto;
+}
+
+.cv-main {
+  padding: 2rem 3rem 4rem;
+  max-width: 860px;
+}
+
+@media (max-width: 1024px) {
+  .cv-inner {
+    grid-template-columns: 1fr;
+  }
+  .cv-sidebar {
+    border-right: none;
+    border-bottom: 1px solid #2d3a4f;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    padding: 1.5rem;
+    position: static;
+    max-height: none;
+  }
+  .cv-main {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .cv-sidebar {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
+  .cv-main {
+    padding: 1rem;
+  }
+}

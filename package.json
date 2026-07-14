@@ -1,0 +1,24 @@
+{
+  "name": "portafolio-edison-martinez",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Portafolio profesional de Edison Martinez — Full-Stack Developer",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint src/ --ext .jsx,.js"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.6",
+    "@vitejs/plugin-react": "^4.4.1",
+    "eslint": "^9.24.0",
+    "tailwindcss": "^4.1.6",
+    "vite": "^6.3.5"
+  }
+}
