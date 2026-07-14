@@ -15,6 +15,7 @@ export default function Services() {
   return (
     <SectionWrapper
       id="services"
+      sectionNum="03"
       title="Servicios"
       eyebrow="SERVICIOS"
       subtitle="Soluciones integrales para tu proyecto digital"
@@ -27,41 +28,43 @@ export default function Services() {
           <article
             key={service.title}
             data-reveal-delay={index * 100}
-            className="reveal group relative bg-surface-900 border border-surface-800 rounded-2xl p-6 transition-all duration-500 hover:border-primary/30 hover:shadow-card-hover hover:-translate-y-1 overflow-hidden"
+            className="reveal group relative rounded-[1.25rem]"
           >
-            <div
-              className={`absolute inset-0 bg-gradient-to-br ${gradientAccents[index % gradientAccents.length]} opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none`}
-            />
+            {/* Gradient border ring on hover */}
+            <div className="absolute -inset-[1px] rounded-[calc(1.25rem+1px)] bg-gradient-to-r from-primary via-accent to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none animate-border-shimmer" />
 
-            {/* Icon */}
-            <div className="relative mb-5 w-14 h-14 rounded-xl bg-primary/8 border border-primary/15 flex items-center justify-center transition-all duration-300 group-hover:bg-primary/15 group-hover:border-primary/30 group-hover:shadow-glow-primary">
-              <span className="text-2xl transition-transform duration-300 group-hover:scale-110">
-                {service.icon || getDefaultIcon(index)}
-              </span>
-            </div>
+            <div className="card-spotlight relative z-10 bg-surface-900 rounded-[1.25rem] p-6 transition-all duration-500 group-hover:-translate-y-1 overflow-hidden">
+              <div
+                className={`absolute inset-0 bg-gradient-to-br ${gradientAccents[index % gradientAccents.length]} opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none`}
+              />
 
-            <h3 className="relative text-h3 text-light mb-2 group-hover:text-primary transition-colors duration-300">
-              {service.title}
-            </h3>
-
-            <p className="relative text-muted text-body-sm leading-relaxed mb-4">
-              {service.description}
-            </p>
-
-            {/* Tech tags */}
-            <div className="relative flex flex-wrap gap-1.5">
-              {(service.techs || defaultTechs(index)).map((tech) => (
-                <span
-                  key={tech}
-                  className="px-2 py-0.5 text-[11px] font-medium text-surface-600 bg-surface-950 rounded-full border border-surface-800"
-                >
-                  {tech}
+              {/* Icon */}
+              <div className="relative mb-5 w-14 h-14 rounded-xl bg-primary/8 border border-primary/15 flex items-center justify-center transition-all duration-300 group-hover:bg-primary/15 group-hover:border-primary/30 group-hover:shadow-glow-primary">
+                <span className="text-2xl transition-transform duration-300 group-hover:scale-110">
+                  {service.icon || getDefaultIcon(index)}
                 </span>
-              ))}
-            </div>
+              </div>
 
-            {/* Shine effect */}
-            <div className="absolute -inset-full top-0 block h-full w-1/2 skew-x-[-25deg] bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:animate-shine pointer-events-none" />
+              <h3 className="relative text-h3 text-light mb-2 group-hover:text-primary transition-colors duration-300">
+                {service.title}
+              </h3>
+
+              <p className="relative text-muted text-body-sm leading-relaxed mb-4">
+                {service.description}
+              </p>
+
+              {/* Tech tags — monospace */}
+              <div className="relative flex flex-wrap gap-1.5">
+                {(service.techs || defaultTechs(index)).map((tech) => (
+                  <span
+                    key={tech}
+                    className="px-2 py-0.5 text-[11px] font-mono font-medium text-surface-600 bg-surface-950 rounded-full border border-surface-800"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </div>
           </article>
         ))}
       </div>

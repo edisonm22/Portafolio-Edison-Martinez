@@ -74,6 +74,7 @@ export default function Contact() {
   return (
     <SectionWrapper
       id="contact"
+      sectionNum="04"
       title="Contacto"
       eyebrow="CONTACTO"
       subtitle="Hablemos sobre tu próximo proyecto"
