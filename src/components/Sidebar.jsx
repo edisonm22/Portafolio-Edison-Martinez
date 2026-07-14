@@ -183,7 +183,7 @@ export default function Sidebar() {
       </aside>
 
       {/* ───────────────── Mobile Header ───────────────── */}
-      <header className="lg:hidden fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-5 h-16 bg-surface-950/85 backdrop-blur-xl border-b border-surface-800/60">
+      <header className="lg:hidden fixed top-0 left-0 right-0 z-70 flex items-center justify-between px-5 h-16 bg-surface-950/85 backdrop-blur-xl border-b border-surface-800/60">
         <a
           href="#home"
           onClick={(e) => { e.preventDefault(); handleNav('home') }}
