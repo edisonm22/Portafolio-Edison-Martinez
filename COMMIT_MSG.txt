@@ -1,1 +1,0 @@
-﻿fix: eliminar ThemeContext, migrar Web3Forms, tokenizar colores, metadata SEO
