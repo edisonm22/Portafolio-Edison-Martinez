@@ -42,7 +42,7 @@ export default function CVContact({ data }) {
               key={s}
               href={`https://${s}.com/edisonmartinez`}
               target="_blank"
-              rel="noopener"
+              rel="noopener noreferrer"
               className="p-3 rounded-xl bg-[#1e293b] border border-[#2d3a4f] text-[#94a3b8] hover:bg-[#0ea5e9] hover:border-[#0ea5e9] hover:text-black transition-all"
               aria-label={s}
             >

@@ -56,7 +56,7 @@ function ProjectItem({ project }) {
           <a
             href={project.demoUrl}
             target="_blank"
-            rel="noopener"
+            rel="noopener noreferrer"
             className="text-sm text-[#0ea5e9] hover:underline"
           >
             Demo
@@ -66,7 +66,7 @@ function ProjectItem({ project }) {
           <a
             href={project.repoUrl}
             target="_blank"
-            rel="noopener"
+            rel="noopener noreferrer"
             className="text-sm text-[#0ea5e9] hover:underline"
           >
             Código
