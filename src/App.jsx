@@ -4,8 +4,6 @@ import Projects from './components/Projects.jsx'
 import Skills from './components/Skills.jsx'
 import Services from './components/Services.jsx'
 import Contact from './components/Contact.jsx'
-import CVLayout from './components/cv/CVLayout.jsx'
-import { cvData } from './data/cvData.js'
 
 export default function App() {
   return (
@@ -18,7 +16,6 @@ export default function App() {
         <Skills />
         <Services />
         <Contact />
-        <CVLayout cvData={cvData} />
       </main>
     </>
   )
