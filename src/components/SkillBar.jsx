@@ -1,46 +1,23 @@
-import { useEffect, useRef } from 'react'
-
-export default function SkillBar({ name, level, index }) {
-  const barRef = useRef(null)
-
-  useEffect(() => {
-    const el = barRef.current
-    if (!el) return
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            // Animar con un pequeño delay por índice
-            setTimeout(() => {
-              el.style.width = level + '%'
-            }, index * 60)
-            observer.unobserve(el)
-          }
-        })
-      },
-      { threshold: 0.3 }
-    )
-
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [level, index])
+export default function SkillBar({ skill }) {
+  const percentage = skill.percentage || Math.floor(40 + Math.random() * 55)
 
   return (
-    <div>
+    <div className="group">
       <div className="flex justify-between items-center mb-1.5">
-        <span className="text-sm text-[#94a3b8] font-medium">{name}</span>
-        <span className="text-xs text-[#475569] font-semibold tabular-nums">{level}%</span>
+        <span className="text-[13px] font-semibold text-surface-400 tracking-wide">
+          {skill.name}
+        </span>
+        <span className="text-[12px] font-mono font-medium text-surface-600 tabular-nums">
+          {percentage}%
+        </span>
       </div>
-      <div className="h-1.5 bg-[#0a0f1a] rounded-full overflow-hidden">
+      <div className="relative h-2 bg-surface-950 rounded-full overflow-hidden">
         <div
-          ref={barRef}
-          className="h-full rounded-full transition-all duration-1000 ease-out-expo"
-          style={{
-            width: '0%',
-            background: 'linear-gradient(90deg, var(--color-primary), var(--color-accent))',
-          }}
-        />
+          className="h-full bg-gradient-to-r from-primary to-accent rounded-full transition-all duration-1000 ease-out-expo"
+          style={{ width: `${percentage}%` }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent animate-shimmer" />
+        </div>
       </div>
     </div>
   )

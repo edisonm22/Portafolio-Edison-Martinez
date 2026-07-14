@@ -95,11 +95,39 @@
   --shadow-glow-primary: 0 0 24px rgba(14, 165, 233, 0.15);
   --shadow-glow-accent: 0 0 24px rgba(168, 85, 247, 0.15);
   --shadow-elevated: 0 25px 50px rgba(0, 0, 0, 0.2);
+  --shadow-nav: 0 4px 30px rgba(0, 0, 0, 0.3);
+  --shadow-button-glow: 0 0 30px rgba(14, 165, 233, 0.3);
+  --shadow-button-glow-soft: 0 0 20px rgba(14, 165, 233, 0.08);
 
   /* ── Easing Custom ── */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out-smooth: cubic-bezier(0.65, 0, 0.35, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ═══════════════════════════════════════════
+   UTILITY CLASSES (shadow helpers)
+   ═══════════════════════════════════════════ */
+@utility shadow-card {
+  box-shadow: var(--shadow-card);
+}
+@utility shadow-card-hover {
+  box-shadow: var(--shadow-card-hover);
+}
+@utility shadow-glow-primary {
+  box-shadow: var(--shadow-glow-primary);
+}
+@utility shadow-elevated {
+  box-shadow: var(--shadow-elevated);
+}
+@utility shadow-nav {
+  box-shadow: var(--shadow-nav);
+}
+@utility shadow-button-glow {
+  box-shadow: var(--shadow-button-glow);
+}
+@utility shadow-button-glow-soft {
+  box-shadow: var(--shadow-button-glow-soft);
 }
 
 /* ═══════════════════════════════════════════
@@ -140,10 +168,12 @@
 @keyframes glow-pulse {
   0%,
   100% {
-    box-shadow: 0 0 20px rgba(14, 165, 233, 0.1), 0 0 40px rgba(168, 85, 247, 0.05);
+    box-shadow: 0 0 20px rgba(14, 165, 233, 0.1),
+      0 0 40px rgba(168, 85, 247, 0.05);
   }
   50% {
-    box-shadow: 0 0 30px rgba(14, 165, 233, 0.2), 0 0 60px rgba(168, 85, 247, 0.1);
+    box-shadow: 0 0 30px rgba(14, 165, 233, 0.2),
+      0 0 60px rgba(168, 85, 247, 0.1);
   }
 }
 
@@ -220,14 +250,15 @@ body {
 }
 
 /* ═══════════════════════════════════════════
-   UTILITY CLASSES
+   UTILITY CLASSES (global)
    ═══════════════════════════════════════════ */
 
 /* Reveal animation (activado vía JS) */
 .reveal {
   opacity: 0;
   transform: translateY(40px) scale(0.97);
-  transition: opacity 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo);
+  transition: opacity 0.8s var(--ease-out-expo),
+    transform 0.8s var(--ease-out-expo);
 }
 .reveal.is-visible {
   opacity: 1;
@@ -237,7 +268,7 @@ body {
   transition-delay: calc(var(--reveal-delay, 0) * 1ms);
 }
 
-/* Skeleton */
+/* Skeleton shimmer */
 .skeleton-line {
   height: 1rem;
   background: linear-gradient(

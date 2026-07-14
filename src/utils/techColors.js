@@ -13,7 +13,7 @@ export const techColors = {
   AWS: 'bg-orange-500/20 text-orange-400',
   Stripe: 'bg-purple-500/20 text-purple-400',
   GraphQL: 'bg-pink-500/20 text-pink-400',
-  default: 'bg-[#2d3a4f] text-[#94a3b8]',
+  default: 'bg-surface-800/80 text-surface-400',
 }
 
 export function getTechColor(tech) {

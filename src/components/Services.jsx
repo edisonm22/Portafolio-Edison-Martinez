@@ -1,6 +1,13 @@
 import { useScrollReveal } from '../hooks/useScrollReveal.js'
-import { services } from '../data/services.js'
 import { SectionWrapper } from './SectionWrapper.jsx'
+import { services } from '../data/services.js'
+
+const gradientAccents = [
+  'from-primary/20 to-accent/10',
+  'from-accent/20 to-cyan-500/10',
+  'from-amber-500/20 to-primary/10',
+  'from-primary/20 to-rose-500/10',
+]
 
 export default function Services() {
   const sectionRef = useScrollReveal()
@@ -9,81 +16,70 @@ export default function Services() {
     <SectionWrapper
       id="services"
       title="Servicios"
-      subtitle="Soluciones adaptadas a tu proyecto, con entrega rápida y calidad garantizada"
+      eyebrow="SERVICIOS"
+      subtitle="Soluciones integrales para tu proyecto digital"
     >
       <div
         ref={sectionRef}
-        className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 reveal"
       >
-        {services.map((s, i) => {
-          const isMiddle = i === 1
-          return (
-            <article
-              key={s.name}
-              data-reveal-delay={i * 120}
-              className={`reveal group relative rounded-2xl p-8 transition-all duration-500 ${
-                isMiddle
-                  ? 'bg-gradient-to-b from-[#0ea5e9]/10 via-[#0ea5e9]/5 to-transparent border-2 border-[#0ea5e9]/30 shadow-[0_0_30px_rgba(14,165,233,0.06)] scale-[1.02] md:scale-105 z-10'
-                  : 'bg-[#111827] border border-[#1e293b] hover:border-[#0ea5e9]/20 hover:shadow-[0_15px_40px_rgba(0,0,0,0.2)]'
-              } hover:-translate-y-1`}
-            >
-              {/* Badge "Recomendado" en la tarjeta del medio */}
-              {isMiddle && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-[#0ea5e9] to-[#0284c7] text-black text-xs font-bold rounded-full uppercase tracking-widest shadow-[0_4px_14px_rgba(14,165,233,0.3)]">
-                  Recomendado
-                </span>
-              )}
+        {services.map((service, index) => (
+          <article
+            key={service.title}
+            data-reveal-delay={index * 100}
+            className="reveal group relative bg-surface-900 border border-surface-800 rounded-2xl p-6 transition-all duration-500 hover:border-primary/30 hover:shadow-card-hover hover:-translate-y-1 overflow-hidden"
+          >
+            <div
+              className={`absolute inset-0 bg-gradient-to-br ${gradientAccents[index % gradientAccents.length]} opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none`}
+            />
 
-              <div className="relative z-10">
-                {/* Icon */}
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl mb-6 transition-all duration-300 group-hover:scale-110 ${
-                  isMiddle
-                    ? 'bg-[#0ea5e9] text-black shadow-[0_4px_14px_rgba(14,165,233,0.25)]'
-                    : 'bg-[#0ea5e9]/10 text-[#0ea5e9]'
-                }`}>
-                  {s.icon}
-                </div>
+            {/* Icon */}
+            <div className="relative mb-5 w-14 h-14 rounded-xl bg-primary/8 border border-primary/15 flex items-center justify-center transition-all duration-300 group-hover:bg-primary/15 group-hover:border-primary/30 group-hover:shadow-glow-primary">
+              <span className="text-2xl transition-transform duration-300 group-hover:scale-110">
+                {service.icon || getDefaultIcon(index)}
+              </span>
+            </div>
 
-                <h3 className="text-h3 text-[#f1f5f9] mb-2">{s.name}</h3>
+            <h3 className="relative text-h3 text-light mb-2 group-hover:text-primary transition-colors duration-300">
+              {service.title}
+            </h3>
 
-                <div className={`text-2xl font-black mb-4 ${
-                  isMiddle ? 'text-[#0ea5e9]' : 'text-[#0ea5e9]'
-                }`}>
-                  {s.price}
-                </div>
+            <p className="relative text-muted text-body-sm leading-relaxed mb-4">
+              {service.description}
+            </p>
 
-                <p className="text-[#64748b] text-body-sm leading-relaxed mb-6">
-                  {s.desc}
-                </p>
-
-                <div className="flex items-center gap-2 text-[#475569] text-sm">
-                  <svg className="w-4 h-4 text-[#0ea5e9]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <span>Entrega: <span className="text-[#94a3b8] font-medium">{s.days}</span></span>
-                </div>
-              </div>
-
-              {/* Optional "pill" de acción al hover */}
-              <div className={`mt-6 pt-6 border-t border-[#1e293b] text-center ${
-                isMiddle ? 'border-[#0ea5e9]/15' : ''
-              }`}>
-                <a
-                  href="#contact"
-                  className={`inline-flex items-center gap-1.5 text-sm font-semibold transition-all duration-200 group-hover:gap-2.5 ${
-                    isMiddle ? 'text-[#0ea5e9]' : 'text-[#475569] hover:text-[#0ea5e9]'
-                  }`}
+            {/* Tech tags */}
+            <div className="relative flex flex-wrap gap-1.5">
+              {(service.techs || defaultTechs(index)).map((tech) => (
+                <span
+                  key={tech}
+                  className="px-2 py-0.5 text-[11px] font-medium text-surface-600 bg-surface-950 rounded-full border border-surface-800"
                 >
-                  Solicitar cotización
-                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-                  </svg>
-                </a>
-              </div>
-            </article>
-          )
-        })}
+                  {tech}
+                </span>
+              ))}
+            </div>
+
+            {/* Shine effect */}
+            <div className="absolute -inset-full top-0 block h-full w-1/2 skew-x-[-25deg] bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:animate-shine pointer-events-none" />
+          </article>
+        ))}
       </div>
     </SectionWrapper>
   )
+}
+
+function getDefaultIcon(index) {
+  const icons = ['⚡', '🎨', '📊', '⚙️']
+  return icons[index % icons.length]
+}
+
+function defaultTechs(index) {
+  const techs = [
+    ['React', 'Next.js', 'Node'],
+    ['Figma', 'Tailwind', 'Framer'],
+    ['MongoDB', 'Postgres', 'AWS'],
+    ['Docker', 'CI/CD', 'Git'],
+  ]
+  return techs[index % techs.length]
 }
