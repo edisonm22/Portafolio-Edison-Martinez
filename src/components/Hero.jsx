@@ -147,19 +147,20 @@ export default function Hero() {
 
         {/* Stats */}
         <div
-          className="mt-14 flex items-center gap-8 font-mono text-sm reveal"
+          className="mt-12 sm:mt-14 flex flex-wrap items-center gap-x-8 gap-y-3 font-mono text-sm reveal"
           data-reveal-delay="450"
         >
           <div>
             <span className="font-bold text-light text-lg">5+</span>
             <span className="text-surface-700 ml-2">a&ntilde;os exp.</span>
           </div>
-          <span className="w-px h-4 bg-surface-800" />
+          <span className="hidden sm:block w-px h-4 bg-surface-800" />
+          <div className="w-full sm:w-auto h-px sm:hidden bg-surface-800" />
           <div>
             <span className="font-bold text-light text-lg">15+</span>
             <span className="text-surface-700 ml-2">proyectos</span>
           </div>
-          <span className="w-px h-4 bg-surface-800" />
+          <span className="hidden sm:block w-px h-4 bg-surface-800" />
           <div>
             <span className="font-bold text-light text-lg">100%</span>
             <span className="text-surface-700 ml-2">satisf.</span>

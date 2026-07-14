@@ -13,10 +13,10 @@ export function SectionWrapper({
       className={`py-section-mobile lg:py-section px-6 sm:px-8 lg:px-12 ${className}`}
     >
       {/* Línea divisoria editorial */}
-      <div className="section-divider mb-12" />
+      <div className="section-divider mb-8 lg:mb-12" />
 
       {/* Cabecera de sección — alineada a la izquierda */}
-      <div className="mb-12">
+      <div className="mb-8 lg:mb-12">
         {sectionNum && eyebrow && (
           <span className="font-mono text-caption text-primary tracking-[0.15em] uppercase">
             {sectionNum} — {eyebrow}

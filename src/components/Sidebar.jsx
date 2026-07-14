@@ -183,7 +183,7 @@ export default function Sidebar() {
       </aside>
 
       {/* ───────────────── Mobile Header ───────────────── */}
-      <header className="lg:hidden fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-5 h-16 bg-surface-950/85 backdrop-blur-xl border-b border-surface-800/60">
+      <header className="lg:hidden fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-5 h-16 bg-surface-950/85 backdrop-blur-xl border-b border-surface-800/60">
         <a
           href="#home"
           onClick={(e) => { e.preventDefault(); handleNav('home') }}
@@ -195,7 +195,7 @@ export default function Sidebar() {
 
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="relative w-10 h-10 flex items-center justify-center rounded-lg bg-surface-900 border border-surface-800 text-surface-400 hover:text-primary hover:border-primary/40 transition-all"
+          className="relative w-12 h-12 flex items-center justify-center rounded-xl bg-surface-900 border border-surface-800 text-surface-400 hover:text-primary hover:border-primary/40 transition-all"
           aria-expanded={mobileOpen}
           aria-controls="mobile-menu"
           aria-label={mobileOpen ? 'Cerrar menú' : 'Abrir menú'}
@@ -217,7 +217,7 @@ export default function Sidebar() {
       {/* ───────────────── Mobile Menu Overlay ───────────────── */}
       <div
         id="mobile-menu"
-        className={`lg:hidden fixed inset-0 z-50 transition-all duration-500 ${
+        className={`lg:hidden fixed inset-0 z-60 transition-all duration-500 ${
           mobileOpen ? 'pointer-events-auto' : 'pointer-events-none'
         }`}
       >
@@ -229,7 +229,7 @@ export default function Sidebar() {
         />
 
         <div
-          className={`absolute top-0 right-0 w-full max-w-sm h-full bg-surface-900 border-l border-surface-800 shadow-elevated transition-transform duration-500 ease-out-expo ${
+          className={`absolute top-0 right-0 w-full max-w-sm h-full bg-surface-900 border-l border-surface-800 shadow-elevated transition-transform duration-500 ease-out-expo overflow-y-auto ${
             mobileOpen ? 'translate-x-0' : 'translate-x-full'
           }`}
         >

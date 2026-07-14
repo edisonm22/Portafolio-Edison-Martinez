@@ -49,10 +49,10 @@ const ProjectCard = forwardRef(function ProjectCard({ project, index = 0 }, ref)
       >
         {/* Image area */}
         <div className="relative aspect-[16/10] overflow-hidden" style={{ background: mesh }}>
-          <div className="absolute inset-0 bg-gradient-to-t from-surface-950/95 via-surface-950/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <div className="absolute inset-0 bg-gradient-to-t from-surface-950/95 via-surface-950/40 to-transparent md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-500" />
 
-          {/* Hover actions */}
-          <div className="absolute bottom-4 left-4 right-4 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-400 flex gap-3 justify-center">
+          {/* Hover actions — siempre visibles en móvil, hover en desktop */}
+          <div className="absolute bottom-4 left-4 right-4 md:translate-y-4 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100 transition-all duration-400 flex gap-3 justify-center">
             {project.demoUrl && (
               <a
                 href={project.demoUrl}
@@ -83,7 +83,7 @@ const ProjectCard = forwardRef(function ProjectCard({ project, index = 0 }, ref)
           )}
 
           {/* Icono decorativo */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-20 group-hover:opacity-10 transition-opacity duration-500">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-20 md:group-hover:opacity-10 transition-opacity duration-500">
             <svg className="w-20 h-20 text-surface-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1}>
               <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
               <circle cx="8.5" cy="8.5" r="1.5" />
