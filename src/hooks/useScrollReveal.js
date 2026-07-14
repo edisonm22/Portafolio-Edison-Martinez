@@ -25,31 +25,33 @@ export function useScrollReveal({
     const node = ref.current
     if (!node) return
 
-    // Si el usuario ya está viendo el elemento (scroll cargado), lo mostramos
+    /** Activa los hijos con data-reveal-delay y el contenedor */
+    const revealChildren = () => {
+      const children = node.querySelectorAll('[data-reveal-delay]')
+      children.forEach((child, i) => {
+        const delay = child.dataset.revealDelay || i * 80
+        child.style.setProperty('--reveal-delay', delay)
+        const distance = Math.min(24 + i * 6, 48)
+        child.style.setProperty('--reveal-distance', `${distance}px`)
+        child.classList.add('is-visible')
+      })
+      node.classList.add('is-visible')
+    }
+
+    // Si el elemento ya es visible al cargar (Hero), activar hijos inmediatamente
     const alreadyVisible = () => {
       const rect = node.getBoundingClientRect()
       return rect.top < window.innerHeight * (1 - threshold)
     }
     if (alreadyVisible()) {
-      node.classList.add('is-visible')
+      revealChildren()
       return
     }
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          // Activar reveal en hijos con data-reveal-delay
-          const children = node.querySelectorAll('[data-reveal-delay]')
-          children.forEach((child, i) => {
-            const delay = child.dataset.revealDelay || i * 80
-            child.style.setProperty('--reveal-delay', delay)
-            const distance = Math.min(24 + i * 6, 48)
-            child.style.setProperty('--reveal-distance', `${distance}px`)
-            child.classList.add('is-visible')
-          })
-          // También activar el propio contenedor si tiene clase 'reveal'
-          node.classList.add('is-visible')
-
+          revealChildren()
           if (triggerOnce) observer.unobserve(node)
         }
       },
