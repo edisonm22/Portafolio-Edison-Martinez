@@ -1,47 +1,3 @@
-export const skillCategories = [
-  {
-    name: 'Frontend',
-    icon: '\u269B\uFE0F',
-    skills: [
-      'React',
-      'TypeScript',
-      'JavaScript',
-      'HTML5',
-      'CSS3',
-      'Tailwind CSS',
-      'Vite',
-      'Next.js',
-    ],
-  },
-  {
-    name: 'Backend',
-    icon: '\uD83D\uDFE2',
-    skills: [
-      'Node.js',
-      'Express',
-      'MongoDB',
-      'PostgreSQL',
-      'REST APIs',
-      'GraphQL',
-      'JWT Auth',
-    ],
-  },
-  {
-    name: 'DevOps & Tools',
-    icon: '\u2601\uFE0F',
-    skills: [
-      'Git',
-      'GitHub Actions',
-      'Docker',
-      'AWS',
-      'Vercel',
-      'Linux',
-      'VS Code',
-      'Postman',
-    ],
-  },
-]
-
 export const levelMap = {
   React: 95,
   TypeScript: 92,
@@ -67,3 +23,52 @@ export const levelMap = {
   'VS Code': 95,
   Postman: 88,
 }
+
+/* Helper: crea objeto skill con porcentaje desde levelMap */
+function sk(name) {
+  return { name, percentage: levelMap[name] || Math.floor(40 + Math.random() * 55) }
+}
+
+export const skillCategories = [
+  {
+    category: 'Frontend',
+    icon: '\u269B\uFE0F',
+    skills: [
+      sk('React'),
+      sk('TypeScript'),
+      sk('JavaScript'),
+      sk('HTML5'),
+      sk('CSS3'),
+      sk('Tailwind CSS'),
+      sk('Vite'),
+      sk('Next.js'),
+    ],
+  },
+  {
+    category: 'Backend',
+    icon: '\uD83D\uDFE2',
+    skills: [
+      sk('Node.js'),
+      sk('Express'),
+      sk('MongoDB'),
+      sk('PostgreSQL'),
+      sk('REST APIs'),
+      sk('GraphQL'),
+      sk('JWT Auth'),
+    ],
+  },
+  {
+    category: 'DevOps & Tools',
+    icon: '\u2601\uFE0F',
+    skills: [
+      sk('Git'),
+      sk('GitHub Actions'),
+      sk('Docker'),
+      sk('AWS'),
+      sk('Vercel'),
+      sk('Linux'),
+      sk('VS Code'),
+      sk('Postman'),
+    ],
+  },
+]
