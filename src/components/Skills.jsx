@@ -53,10 +53,11 @@ export default function Skills({ loading = false }) {
         ref={sectionRef}
         className="grid grid-cols-1 lg:grid-cols-3 gap-8 reveal"
       >
-        {skillCategories.map((cat) => (
+        {skillCategories.map((cat, index) => (
           <article
             key={cat.category}
-            className="bg-surface-900 border border-surface-800 rounded-2xl p-6 transition-all duration-500 hover:border-primary/30 hover:shadow-card-hover"
+            data-reveal-delay={index * 100}
+            className="reveal bg-surface-900 border border-surface-800 rounded-2xl p-6 transition-all duration-500 hover:border-primary/30 hover:shadow-card-hover"
           >
             <div className="flex items-center gap-3 mb-6">
               <div className="w-12 h-12 rounded-xl bg-primary/5 border border-primary/10 flex items-center justify-center shrink-0">

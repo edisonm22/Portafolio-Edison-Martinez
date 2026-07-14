@@ -341,8 +341,7 @@ html.custom-cursor-active * {
    ═══════════════════════════════════════════ */
 
 .reveal[data-reveal-delay] {
-  --reveal-translate-y: calc(40px + var(--reveal-delay, 0) * 0.15px);
-  transform: translateY(var(--reveal-translate-y, 40px)) scale(0.97);
+  transform: translateY(var(--reveal-distance, 40px)) scale(0.97);
 }
 
 .reveal.is-visible[data-reveal-delay] {

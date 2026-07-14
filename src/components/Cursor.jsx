@@ -15,11 +15,32 @@ export default function Cursor() {
     const el = document.createElement('div')
     el.id = 'custom-cursor'
     document.body.appendChild(el)
+
+    /* ── Estado: modo mouse por defecto ── */
+    let isActive = true
+    let keyboardDetected = false
     document.documentElement.classList.add('custom-cursor-active')
+    el.classList.add('cursor-visible')
 
     let mouseX = -100, mouseY = -100
     let cursorX = -100, cursorY = -100
     let rafId = null
+
+    /* ── Activar/desactivar cursor personalizado ── */
+    const activate = () => {
+      if (isActive) return
+      isActive = true
+      keyboardDetected = false
+      document.documentElement.classList.add('custom-cursor-active')
+      el.classList.add('cursor-visible')
+    }
+
+    const deactivate = () => {
+      if (!isActive) return
+      isActive = false
+      document.documentElement.classList.remove('custom-cursor-active')
+      el.classList.remove('cursor-visible')
+    }
 
     /* ── Interpolación lerp ── */
     const lerp = () => {
@@ -28,18 +49,16 @@ export default function Cursor() {
 
       el.style.transform = `translate(${cursorX}px, ${cursorY}px)`
 
-      // Mostrar cursor tras el primer movimiento
-      if (!el.classList.contains('cursor-visible') && mouseX > 0) {
-        el.classList.add('cursor-visible')
-      }
-
       rafId = requestAnimationFrame(lerp)
     }
 
-    /* ── Mouse move: posición + hover detection ── */
+    /* ── Mouse move: posicion + hover + reactivar ── */
     const handleMouse = (e) => {
       mouseX = e.clientX
       mouseY = e.clientY
+
+      // Si venia de teclado, reactivar cursor personalizado
+      if (keyboardDetected) activate()
 
       const target = e.target
       const isHover = !!target.closest(
@@ -48,7 +67,16 @@ export default function Cursor() {
       el.classList.toggle('cursor-hover', isHover)
     }
 
+    /* ── Teclado: detectar Tab → desactivar cursor personalizado ── */
+    const handleKey = (e) => {
+      if (e.key === 'Tab' && !keyboardDetected) {
+        keyboardDetected = true
+        deactivate()
+      }
+    }
+
     document.addEventListener('mousemove', handleMouse, { passive: true })
+    document.addEventListener('keydown', handleKey, { passive: true })
 
     rafId = requestAnimationFrame(lerp)
 
@@ -56,6 +84,7 @@ export default function Cursor() {
     return () => {
       if (rafId) cancelAnimationFrame(rafId)
       document.removeEventListener('mousemove', handleMouse)
+      document.removeEventListener('keydown', handleKey)
       document.documentElement.classList.remove('custom-cursor-active')
       el.remove()
     }

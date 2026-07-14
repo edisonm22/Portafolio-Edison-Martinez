@@ -43,6 +43,8 @@ export function useScrollReveal({
           children.forEach((child, i) => {
             const delay = child.dataset.revealDelay || i * 80
             child.style.setProperty('--reveal-delay', delay)
+            const distance = Math.min(24 + i * 6, 48)
+            child.style.setProperty('--reveal-distance', `${distance}px`)
             child.classList.add('is-visible')
           })
           // También activar el propio contenedor si tiene clase 'reveal'
