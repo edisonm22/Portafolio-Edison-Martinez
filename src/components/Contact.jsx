@@ -5,7 +5,7 @@ import { useScrollReveal } from '../hooks/useScrollReveal.js'
 /* ============================================================
    CONSTANTS — NO modifiques con datos personales reales
    ============================================================ */
-const WEB3FORMS_ACCESS_KEY = 'TU_ACCESS_KEY_AQUI' // TODO: obtener key real en web3forms.com y reemplazar antes de publicar
+const WEB3FORMS_ACCESS_KEY = '4ec05370-b76f-4626-bb77-b08b5637cc5c'
 const EMAIL = 'edison86233268@gmail.com'
 const LOCATION = 'Remoto'
 
