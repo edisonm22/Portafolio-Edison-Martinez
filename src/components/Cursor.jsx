@@ -16,17 +16,16 @@ export default function Cursor() {
     el.id = 'custom-cursor'
     document.body.appendChild(el)
 
-    /* ── Estado: modo mouse por defecto ── */
-    let isActive = true
+    /* ── Estado: arranca inactivo (cursor nativo visible) ── */
+    let isActive = false
     let keyboardDetected = false
-    document.documentElement.classList.add('custom-cursor-active')
-    el.classList.add('cursor-visible')
+    let mouseEverMoved = false
 
     let mouseX = -100, mouseY = -100
     let cursorX = -100, cursorY = -100
     let rafId = null
 
-    /* ── Activar/desactivar cursor personalizado ── */
+    /* ── Activar cursor personalizado (oculta nativo, muestra puntito) ── */
     const activate = () => {
       if (isActive) return
       isActive = true
@@ -35,6 +34,7 @@ export default function Cursor() {
       el.classList.add('cursor-visible')
     }
 
+    /* ── Desactivar cursor personalizado (restaura cursor nativo) ── */
     const deactivate = () => {
       if (!isActive) return
       isActive = false
@@ -42,7 +42,7 @@ export default function Cursor() {
       el.classList.remove('cursor-visible')
     }
 
-    /* ── Interpolación lerp ── */
+    /* ── Interpolación lerp (siempre corre para mantener posición actualizada) ── */
     const lerp = () => {
       cursorX += (mouseX - cursorX) * 0.18
       cursorY += (mouseY - cursorY) * 0.18
@@ -52,12 +52,18 @@ export default function Cursor() {
       rafId = requestAnimationFrame(lerp)
     }
 
-    /* ── Mouse move: posicion + hover + reactivar ── */
+    /* ── Mouse move: activar en primer movimiento + hover ── */
     const handleMouse = (e) => {
       mouseX = e.clientX
       mouseY = e.clientY
 
-      // Si venia de teclado, reactivar cursor personalizado
+      // Primer movimiento del mouse: activar cursor personalizado
+      if (!mouseEverMoved) {
+        mouseEverMoved = true
+        activate()
+      }
+
+      // Si venía de teclado, reactivar cursor personalizado
       if (keyboardDetected) activate()
 
       const target = e.target
@@ -69,7 +75,7 @@ export default function Cursor() {
 
     /* ── Teclado: detectar Tab → desactivar cursor personalizado ── */
     const handleKey = (e) => {
-      if (e.key === 'Tab' && !keyboardDetected) {
+      if (e.key === 'Tab') {
         keyboardDetected = true
         deactivate()
       }
