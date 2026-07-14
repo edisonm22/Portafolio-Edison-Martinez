@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { SectionWrapper } from './SectionWrapper.jsx'
 import { useScrollReveal } from '../hooks/useScrollReveal.js'
+import { useMagnetic } from '../hooks/useMagnetic.js'
 
 /* ============================================================
    CONSTANTS — NO modifiques con datos personales reales
@@ -68,6 +69,9 @@ export default function Contact() {
     }
   }
 
+  const submitRef = useRef(null)
+  useMagnetic(submitRef, { maxTranslate: 5, lerp: 0.13 })
+
   const inputClass =
     'w-full px-4 py-3.5 bg-surface-900 border border-surface-800 rounded-xl text-light text-sm placeholder:text-surface-700 transition-all duration-300 focus:outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/15 focus:bg-surface-850'
 
@@ -134,10 +138,11 @@ export default function Contact() {
             * Campos obligatorios
           </p>
 
+          <div ref={submitRef} className="inline-block">
           <button
             type="submit"
             disabled={sending}
-            className="group relative w-full sm:w-auto px-8 py-4 bg-primary text-black font-bold text-base rounded-xl transition-all duration-300 hover:shadow-button-glow hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 overflow-hidden"
+            className="group relative w-full sm:w-auto px-8 py-4 bg-primary text-black font-bold text-base rounded-xl transition-all duration-300 hover:shadow-button-glow active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden"
           >
             <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
             <span className="relative flex items-center justify-center gap-2">
@@ -159,6 +164,7 @@ export default function Contact() {
               )}
             </span>
           </button>
+          </div>
 
           {/* Status message */}
           {status.msg && (

@@ -1,4 +1,7 @@
+import { useState } from 'react'
 import Sidebar from './components/Sidebar.jsx'
+import Loader from './components/Loader.jsx'
+import Cursor from './components/Cursor.jsx'
 import Hero from './components/Hero.jsx'
 import Projects from './components/Projects.jsx'
 import Skills from './components/Skills.jsx'
@@ -6,16 +9,16 @@ import Services from './components/Services.jsx'
 import Contact from './components/Contact.jsx'
 
 export default function App() {
+  const [loaderDone, setLoaderDone] = useState(false)
+
   return (
     <>
+      {!loaderDone && <Loader onFinish={() => setLoaderDone(true)} />}
       <Sidebar />
+      <Cursor />
       <SkipLink />
       <div className="noise-overlay" />
-
-      <main
-        id="main"
-        className="lg:ml-[40%] min-h-screen pt-16 lg:pt-0"
-      >
+      <main id="main" className="lg:ml-[40%] min-h-screen pt-16 lg:pt-0">
         <Hero />
         <Projects />
         <Skills />

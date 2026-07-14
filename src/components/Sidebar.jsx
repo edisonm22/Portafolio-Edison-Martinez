@@ -1,10 +1,15 @@
 import { useState, useEffect } from 'react'
 import { navItems } from '../data/navData.js'
 import { scrollToSection } from '../utils/helpers.js'
+import { useReducedMotion } from '../hooks/useReducedMotion.js'
+
+const SECTION_NUMS = { home: '—', projects: '01', skills: '02', services: '03', contact: '04' }
 
 export default function Sidebar() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('home')
+  const [scrollProgress, setScrollProgress] = useState(0)
+  const reduced = useReducedMotion()
 
   /* ── Scroll spy ── */
   useEffect(() => {
@@ -27,12 +32,33 @@ export default function Sidebar() {
     return () => observers.forEach((o) => o.disconnect())
   }, [])
 
+  /* ── Scroll progress bar ── */
+  useEffect(() => {
+    if (reduced) return
+
+    const update = () => {
+      const docEl = document.documentElement
+      const scrollTop = docEl.scrollTop || document.body.scrollTop
+      const scrollHeight = docEl.scrollHeight - docEl.clientHeight
+      setScrollProgress(scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0)
+    }
+
+    let ticking = false
+    const onScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => { update(); ticking = false })
+        ticking = true
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [reduced])
+
   /* ── Cerrar menú al redimensionar a desktop ── */
   useEffect(() => {
     const mq = window.matchMedia('(min-width: 1024px)')
-    const handler = () => {
-      if (mq.matches) setMobileOpen(false)
-    }
+    const handler = () => { if (mq.matches) setMobileOpen(false) }
     mq.addEventListener('change', handler)
     return () => mq.removeEventListener('change', handler)
   }, [])
@@ -42,13 +68,22 @@ export default function Sidebar() {
     setMobileOpen(false)
   }
 
+  const currentNum = SECTION_NUMS[activeSection] || '—'
+
   return (
     <>
       {/* ───────────────── Desktop Sidebar ───────────────── */}
       <aside className="hidden lg:flex fixed top-0 left-0 z-30 w-[40%] h-screen flex-col justify-between p-12 xl:p-14 border-r border-surface-800/60 bg-surface-950/90">
+        {/* Scroll progress bar */}
+        <div className="scroll-progress-track">
+          <div
+            className="scroll-progress-bar"
+            style={{ height: `${scrollProgress}%` }}
+          />
+        </div>
+
         {/* Top: Brand + Nav */}
         <div>
-          {/* Logo */}
           <a
             href="#home"
             onClick={(e) => { e.preventDefault(); handleNav('home') }}
@@ -61,10 +96,9 @@ export default function Sidebar() {
             <span className="block text-xs font-mono text-surface-600 mt-1 tracking-wider uppercase">
               Full-Stack Developer
             </span>
-            <span className="block mt-2 w-8 h-px bg-primary/60 transition-all duration-300 group-hover:w-12" />
+            <span className="block mt-2 w-8 h-px bg-primary/60 transition-all duration-500 ease-spring group-hover:w-12" />
           </a>
 
-          {/* Navigation */}
           <nav aria-label="Navegación principal">
             <ul className="space-y-1">
               {navItems.map((item) => {
@@ -81,9 +115,9 @@ export default function Sidebar() {
                       }`}
                       aria-current={isActive ? 'true' : undefined}
                     >
-                      {/* Indicador visual */}
+                      {/* Indicador con spring easing */}
                       <span
-                        className={`block h-px transition-all duration-400 ${
+                        className={`block h-px transition-all duration-500 ease-spring ${
                           isActive
                             ? 'w-8 bg-primary'
                             : 'w-4 bg-surface-700 group-hover:w-6 group-hover:bg-surface-500'
@@ -104,8 +138,18 @@ export default function Sidebar() {
           </nav>
         </div>
 
-        {/* Bottom: Social + Footer */}
+        {/* Bottom: Section number + Social + Footer */}
         <div className="space-y-6">
+          {/* Section number (animated) */}
+          <div className="overflow-hidden">
+            <span
+              key={currentNum}
+              className="section-num-animate block font-mono text-[2.5rem] font-bold text-surface-800 leading-none tracking-tight"
+            >
+              {currentNum}
+            </span>
+          </div>
+
           {/* Social links */}
           <div className="flex items-center gap-3">
             <a
@@ -132,7 +176,6 @@ export default function Sidebar() {
             </a>
           </div>
 
-          {/* Footer */}
           <p className="font-mono text-[11px] text-surface-700 tracking-wider uppercase">
             &copy; {new Date().getFullYear()} Edison Martinez
           </p>
@@ -178,7 +221,6 @@ export default function Sidebar() {
           mobileOpen ? 'pointer-events-auto' : 'pointer-events-none'
         }`}
       >
-        {/* Backdrop */}
         <div
           className={`absolute inset-0 bg-surface-950/70 backdrop-blur-sm transition-opacity duration-500 ${
             mobileOpen ? 'opacity-100' : 'opacity-0'
@@ -186,7 +228,6 @@ export default function Sidebar() {
           onClick={() => setMobileOpen(false)}
         />
 
-        {/* Panel */}
         <div
           className={`absolute top-0 right-0 w-full max-w-sm h-full bg-surface-900 border-l border-surface-800 shadow-elevated transition-transform duration-500 ease-out-expo ${
             mobileOpen ? 'translate-x-0' : 'translate-x-full'
@@ -224,7 +265,6 @@ export default function Sidebar() {
               </ul>
             </nav>
 
-            {/* Social en mobile */}
             <div className="flex gap-3 pt-6 border-t border-surface-800">
               <a
                 href="https://github.com/edisonm22"

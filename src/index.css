@@ -236,6 +236,145 @@
 }
 
 /* ═══════════════════════════════════════════
+   LOADER DE ENTRADA
+   ═══════════════════════════════════════════ */
+
+@keyframes loader-reveal {
+  0% { opacity: 0; transform: translateY(24px) rotateX(-20deg); }
+  100% { opacity: 1; transform: translateY(0) rotateX(0); }
+}
+
+@keyframes loader-fade-out {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.loader-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-surface-950);
+}
+
+.loader-letter {
+  display: inline-block;
+  opacity: 0;
+  animation: loader-reveal 0.45s var(--ease-out-expo) both;
+}
+.loader-letter:nth-child(1) { animation-delay: 0.05s; }
+.loader-letter:nth-child(2) { animation-delay: 0.2s;  }
+.loader-letter:nth-child(3) { animation-delay: 0.35s; }
+
+.loader-exit {
+  animation: loader-fade-out 0.4s var(--ease-out-expo) both;
+}
+
+html.reduced-motion .loader-letter {
+  animation-duration: 0.1s;
+}
+html.reduced-motion .loader-exit {
+  animation-duration: 0.1s;
+}
+
+/* ═══════════════════════════════════════════
+   CUSTOM CURSOR (desktop only)
+   ═══════════════════════════════════════════ */
+
+html.custom-cursor-active,
+html.custom-cursor-active * {
+  cursor: none !important;
+}
+
+#custom-cursor {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  background: var(--color-primary);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0;
+  transition: width 0.25s var(--ease-out-expo),
+              height 0.25s var(--ease-out-expo),
+              background 0.25s var(--ease-out-expo),
+              border 0.25s var(--ease-out-expo),
+              opacity 0.3s ease;
+  transform: translate(-50%, -50%);
+}
+
+#custom-cursor.cursor-visible {
+  opacity: 1;
+}
+
+#custom-cursor.cursor-hover {
+  width: 28px;
+  height: 28px;
+  background: rgba(14, 165, 233, 0.06);
+  border: 1.5px solid var(--color-primary);
+}
+
+/* ═══════════════════════════════════════════
+   SCROLL PROGRESS BAR
+   ═══════════════════════════════════════════ */
+
+.scroll-progress-track {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background: var(--color-surface-800);
+}
+
+.scroll-progress-bar {
+  width: 100%;
+  background: var(--color-primary);
+  transition: height 0.1s linear;
+  will-change: height;
+}
+
+/* ═══════════════════════════════════════════
+   REVEAL CASCADE (progressive translateY)
+   ═══════════════════════════════════════════ */
+
+.reveal[data-reveal-delay] {
+  --reveal-translate-y: calc(40px + var(--reveal-delay, 0) * 0.15px);
+  transform: translateY(var(--reveal-translate-y, 40px)) scale(0.97);
+}
+
+.reveal.is-visible[data-reveal-delay] {
+  transform: translateY(0) scale(1);
+}
+
+/* ── reduced-motion: anula animaciones ── */
+html.reduced-motion .reveal,
+html.reduced-motion .reveal[data-reveal-delay] {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+/* ═══════════════════════════════════════════
+   SECTION NUMBER (sidebar animation)
+   ═══════════════════════════════════════════ */
+
+@keyframes section-num-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.section-num-animate {
+  animation: section-num-in 0.35s var(--ease-out-expo) both;
+}
+
+html.reduced-motion .section-num-animate {
+  animation-duration: 0.05s;
+}
+
+/* ═══════════════════════════════════════════
    GLOBAL STYLES
    ═══════════════════════════════════════════ */
 
