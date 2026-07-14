@@ -1,27 +1,37 @@
 import { forwardRef } from 'react'
 import { getTechColor } from '../utils/techColors.js'
 
-const ProjectCard = forwardRef(function ProjectCard({ project }, ref) {
+const gradientMeshes = [
+  'linear-gradient(135deg, rgba(14,165,233,0.12), rgba(168,85,247,0.08), rgba(14,165,233,0.04))',
+  'linear-gradient(135deg, rgba(168,85,247,0.12), rgba(14,165,233,0.08), rgba(168,85,247,0.04))',
+  'linear-gradient(135deg, rgba(6,182,212,0.12), rgba(59,130,246,0.08), rgba(6,182,212,0.04))',
+  'linear-gradient(135deg, rgba(236,72,153,0.10), rgba(168,85,247,0.08), rgba(236,72,153,0.04))',
+  'linear-gradient(135deg, rgba(34,211,238,0.12), rgba(99,102,241,0.08), rgba(34,211,238,0.04))',
+]
+
+const ProjectCard = forwardRef(function ProjectCard({ project, index = 0 }, ref) {
   const techs = project.technologies || ['React', 'Node', 'MongoDB']
+  const mesh = gradientMeshes[index % gradientMeshes.length]
 
   return (
     <article
       ref={ref}
-      className="group relative bg-[#1e293b] border border-[#2d3a4f] rounded-2xl overflow-hidden transition-all duration-500 hover:border-[#0ea5e9]/50 hover:shadow-[0_20px_40px_rgba(14,165,233,0.15)] hover:-translate-y-2"
+      data-reveal-delay={index * 100}
+      className="reveal group relative bg-[#111827] border border-[#1e293b] rounded-2xl overflow-hidden transition-all duration-500 hover:border-[#0ea5e9]/30 hover:shadow-[0_20px_50px_rgba(0,0,0,0.3),0_0_30px_rgba(14,165,233,0.06)] hover:-translate-y-1"
     >
-      {/* Image placeholder */}
-      <div className="relative aspect-video overflow-hidden bg-[#111827]">
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0f1a]/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-        <div className="absolute inset-0 bg-gradient-to-tr from-[#0ea5e9]/10 to-purple-500/10 opacity-0 group-hover:opacity-10 transition-opacity duration-500" />
+      {/* Gradient mesh background */}
+      <div className="relative aspect-[16/10] overflow-hidden" style={{ background: mesh }}>
+        {/* Hover overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0f1a]/95 via-[#0a0f1a]/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
         {/* Hover actions */}
-        <div className="absolute bottom-4 left-4 right-4 translate-y-6 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 flex gap-3 justify-center">
+        <div className="absolute bottom-4 left-4 right-4 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-400 flex gap-3 justify-center">
           {project.demoUrl && (
             <a
               href={project.demoUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 max-w-[140px] px-4 py-2.5 bg-[#0ea5e9] text-black font-semibold rounded-lg text-center transition-all hover:bg-[#0284c7] hover:shadow-lg hover:shadow-[#0ea5e9]/20"
+              className="flex-1 max-w-[140px] px-4 py-2.5 bg-[#0ea5e9] text-black font-semibold text-sm rounded-lg text-center transition-all duration-200 hover:bg-[#0284c7] hover:shadow-lg hover:shadow-[#0ea5e9]/20 active:scale-95"
             >
               Demo
             </a>
@@ -31,7 +41,7 @@ const ProjectCard = forwardRef(function ProjectCard({ project }, ref) {
               href={project.repoUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 max-w-[140px] px-4 py-2.5 border-2 border-[#0ea5e9] text-[#0ea5e9] font-semibold rounded-lg text-center transition-all hover:bg-[#0ea5e9] hover:text-black"
+              className="flex-1 max-w-[140px] px-4 py-2.5 border border-[#0ea5e9]/50 text-[#0ea5e9] font-semibold text-sm rounded-lg text-center transition-all duration-200 hover:bg-[#0ea5e9] hover:text-black active:scale-95"
             >
               Código
             </a>
@@ -40,69 +50,68 @@ const ProjectCard = forwardRef(function ProjectCard({ project }, ref) {
 
         {/* Featured badge */}
         {project.featured && (
-          <span className="absolute top-3 right-3 px-2 py-1 bg-amber-500 text-black text-xs font-bold rounded-full uppercase tracking-wider shadow-[0_4px_14px_rgba(245,158,11,0.3)]">
+          <span className="absolute top-4 left-4 px-2.5 py-0.5 bg-amber-500/20 text-amber-400 text-[11px] font-bold rounded-full uppercase tracking-widest border border-amber-500/20 backdrop-blur-sm">
             Destacado
           </span>
         )}
 
-        {/* Placeholder icon */}
-        <div className="w-full h-full flex items-center justify-center text-[#64748b]">
-          <svg
-            className="w-16 h-16"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
+        {/* Icon decorativo */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-20 group-hover:opacity-10 transition-opacity duration-500">
+          <svg className="w-20 h-20 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1}>
             <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
             <circle cx="8.5" cy="8.5" r="1.5" />
             <polyline points="21 15 16 10 5 21" />
           </svg>
         </div>
+
+        {/* Glow sutil en hover */}
+        <div className="absolute -inset-2 bg-gradient-to-r from-[#0ea5e9]/0 via-[#0ea5e9]/5 to-[#a855f7]/0 opacity-0 group-hover:opacity-100 blur-2xl transition-opacity duration-700 pointer-events-none" />
       </div>
 
       {/* Content */}
       <div className="p-6">
-        <div className="flex items-start justify-between gap-4 mb-3">
-          <h3 className="text-xl font-bold text-[#f1f5f9] flex-1">
-            {project.title}
-          </h3>
+        <div className="flex items-start justify-between gap-4 mb-2">
+          <h3 className="text-h3 text-[#f1f5f9]">{project.title}</h3>
           {project.featured && (
-            <span className="flex-shrink-0 w-5 h-5 text-amber-500">
+            <span className="shrink-0 w-4 h-4 text-amber-400">
               <svg fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
               </svg>
             </span>
           )}
         </div>
-        <p className="text-[#94a3b8] leading-relaxed mb-4">
+        <p className="text-[#64748b] text-body-sm leading-relaxed mb-4 line-clamp-2">
           {project.description}
         </p>
-        <div className="flex flex-wrap gap-2 mb-4">
+
+        {/* Tech pills */}
+        <div className="flex flex-wrap gap-1.5 mb-4">
           {techs.map((tech, i) => (
-            <span key={i} className={`px-2.5 py-1 text-xs rounded-full ${getTechColor(tech)}`}>
+            <span
+              key={i}
+              className={`px-2.5 py-1 text-[11px] font-medium rounded-full ${getTechColor(tech)}`}
+            >
               {tech}
             </span>
           ))}
         </div>
+
+        {/* Highlights */}
         {project.highlights && project.highlights.length > 0 && (
-          <ul className="space-y-2 border-t border-[#2d3a4f]/50 pt-4">
+          <ul className="space-y-1.5 border-t border-[#1e293b] pt-4 mt-1">
             {project.highlights.map((h, i) => (
               <li
                 key={i}
-                className="flex items-start gap-2 text-sm text-[#94a3b8]"
+                className="flex items-start gap-2 text-[#475569] text-sm"
               >
                 <svg
-                  className="w-4 h-4 text-[#0ea5e9] shrink-0 mt-0.5"
+                  className="w-3.5 h-3.5 text-[#0ea5e9] shrink-0 mt-0.5"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
+                  strokeWidth={2.5}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
-                  />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
                 {h}
               </li>

@@ -11,7 +11,10 @@ export default function SkillBar({ name, level, index }) {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            el.style.width = level + '%'
+            // Animar con un pequeño delay por índice
+            setTimeout(() => {
+              el.style.width = level + '%'
+            }, index * 60)
             observer.unobserve(el)
           }
         })
@@ -21,19 +24,22 @@ export default function SkillBar({ name, level, index }) {
 
     observer.observe(el)
     return () => observer.disconnect()
-  }, [level])
+  }, [level, index])
 
   return (
-    <div style={{ animationDelay: index * 80 + 'ms' }}>
-      <div className="flex justify-between mb-1.5">
-        <span className="text-[#f1f5f9] font-medium">{name}</span>
-        <span className="text-[#0ea5e9] font-bold text-sm">{level}%</span>
+    <div>
+      <div className="flex justify-between items-center mb-1.5">
+        <span className="text-sm text-[#94a3b8] font-medium">{name}</span>
+        <span className="text-xs text-[#475569] font-semibold tabular-nums">{level}%</span>
       </div>
-      <div className="h-2 bg-[#111827] rounded-full overflow-hidden">
+      <div className="h-1.5 bg-[#0a0f1a] rounded-full overflow-hidden">
         <div
           ref={barRef}
-          className="h-full bg-gradient-to-r from-[#0ea5e9] to-purple-500 rounded-full transition-all duration-1000 ease-out"
-          style={{ width: '0%' }}
+          className="h-full rounded-full transition-all duration-1000 ease-out-expo"
+          style={{
+            width: '0%',
+            background: 'linear-gradient(90deg, var(--color-primary), var(--color-accent))',
+          }}
         />
       </div>
     </div>
