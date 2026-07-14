@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import Hero from './Hero';
+import { Hero } from './sections/Hero';
 
 describe('Hero', () => {
   it('renders without crashing', () => {

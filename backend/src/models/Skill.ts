@@ -1,4 +1,4 @@
-import { Schema, model, models, Document } from 'mongoose'
+import mongoose, { Schema, model, Document } from 'mongoose'
 
 export interface ISkill extends Document {
   name: string
@@ -19,4 +19,4 @@ const skillSchema = new Schema<ISkill>(
 
 skillSchema.index({ category: 1, level: -1 })
 
-export const Skill = models.Skill || model<ISkill>('Skill', skillSchema)
+export const Skill = mongoose.models.Skill || model<ISkill>('Skill', skillSchema)

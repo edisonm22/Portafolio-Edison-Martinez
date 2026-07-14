@@ -1,4 +1,4 @@
-import { Schema, model, models, Document } from 'mongoose'
+import mongoose, { Schema, model, Document } from 'mongoose'
 
 export interface IProject extends Document {
   title: string
@@ -27,4 +27,4 @@ const projectSchema = new Schema<IProject>(
 
 projectSchema.index({ title: 'text', description: 'text' })
 
-export const Project = models.Project || model<IProject>('Project', projectSchema)
+export const Project = mongoose.models.Project || model<IProject>('Project', projectSchema)
