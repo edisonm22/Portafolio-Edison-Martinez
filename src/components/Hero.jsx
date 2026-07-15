@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { useReducedMotion } from '../hooks/useReducedMotion.js'
 import { useMagnetic } from '../hooks/useMagnetic.js'
 import { useScrollReveal } from '../hooks/useScrollReveal.js'
-import Hero3D from './Hero3D.jsx'
+import HeroThreeScene from './HeroThreeScene.jsx'
 
 export default function Hero() {
   const revealRef = useScrollReveal()
@@ -109,9 +109,9 @@ export default function Hero() {
           style={{ willChange: 'transform' }}
         />
 
-        {/* ── Hero 3D Scene (desktop only) ── */}
+        {/* ── Hero Three.js Scene (desktop only) ── */}
         <div className="hidden lg:block absolute inset-0">
-          <Hero3D reduced={reduced} />
+          <HeroThreeScene reduced={reduced} />
         </div>
       </div>
 

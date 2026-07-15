@@ -1,4 +1,5 @@
 import { useScrollReveal } from '../hooks/useScrollReveal.js'
+import { useTilt3D } from '../hooks/useTilt3D.js'
 import { SectionWrapper } from './SectionWrapper.jsx'
 import SkillBar from './SkillBar.jsx'
 import { skillCategories } from '../data/skills.js'
@@ -19,6 +20,10 @@ function SkeletonSkillBar() {
 
 export default function Skills({ loading = false }) {
   const sectionRef = useScrollReveal()
+  const tilt0 = useTilt3D({ maxTilt: 4, scale: 1.01, speed: 400, glare: false })
+  const tilt1 = useTilt3D({ maxTilt: 4, scale: 1.01, speed: 400, glare: false })
+  const tilt2 = useTilt3D({ maxTilt: 4, scale: 1.01, speed: 400, glare: false })
+  const tiltRefs = [tilt0, tilt1, tilt2]
 
   if (loading) {
     return (
@@ -56,8 +61,10 @@ export default function Skills({ loading = false }) {
         {skillCategories.map((cat, index) => (
           <article
             key={cat.category}
+            ref={tiltRefs[index] || null}
             data-reveal-delay={index * 100}
             className="reveal-3d-scale bg-surface-900 border border-surface-800 rounded-2xl p-6 transition-all duration-500 hover:border-primary/30 hover:shadow-card-hover"
+            style={{ perspective: '800px', transformStyle: 'preserve-3d' }}
           >
             <div className="flex items-center gap-3 mb-6">
               <div className="w-12 h-12 rounded-xl bg-primary/5 border border-primary/10 flex items-center justify-center shrink-0">

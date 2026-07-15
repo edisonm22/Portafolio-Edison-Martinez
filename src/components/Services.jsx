@@ -1,4 +1,5 @@
 import { useScrollReveal } from '../hooks/useScrollReveal.js'
+import { useTilt3D } from '../hooks/useTilt3D.js'
 import { SectionWrapper } from './SectionWrapper.jsx'
 import { services } from '../data/services.js'
 
@@ -11,6 +12,11 @@ const gradientAccents = [
 
 export default function Services() {
   const sectionRef = useScrollReveal()
+  const tilt0 = useTilt3D({ maxTilt: 6, scale: 1.02, speed: 400, glare: false })
+  const tilt1 = useTilt3D({ maxTilt: 6, scale: 1.02, speed: 400, glare: false })
+  const tilt2 = useTilt3D({ maxTilt: 6, scale: 1.02, speed: 400, glare: false })
+  const tilt3 = useTilt3D({ maxTilt: 6, scale: 1.02, speed: 400, glare: false })
+  const tiltRefs = [tilt0, tilt1, tilt2, tilt3]
 
   return (
     <SectionWrapper
@@ -27,8 +33,10 @@ export default function Services() {
         {services.map((service, index) => (
           <article
             key={service.title}
+            ref={tiltRefs[index] || null}
             data-reveal-delay={index * 100}
             className="reveal-3d-left group relative rounded-[1.25rem]"
+            style={{ perspective: '800px', transformStyle: 'preserve-3d' }}
           >
             {/* Gradient border ring on hover */}
             <div className="absolute -inset-[1px] rounded-[calc(1.25rem+1px)] bg-gradient-to-r from-primary via-accent to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none animate-border-shimmer" />
