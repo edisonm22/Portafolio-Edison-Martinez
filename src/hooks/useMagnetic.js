@@ -69,11 +69,22 @@ export function useMagnetic(ref, {
 
     el.addEventListener('mousemove', handleMove, { passive: true })
     el.addEventListener('mouseleave', handleLeave, { passive: true })
+
+    /* ── Limpiar transform al redimensionar (evita desalineación) ── */
+    const handleResize = () => {
+      targetX = 0; targetY = 0
+      currentX = 0; currentY = 0
+      el.style.transform = ''
+      if (rafId) { cancelAnimationFrame(rafId); rafId = null }
+    }
+    window.addEventListener('resize', handleResize, { passive: true })
+
     rafId = requestAnimationFrame(animate)
 
     return () => {
       el.removeEventListener('mousemove', handleMove)
       el.removeEventListener('mouseleave', handleLeave)
+      window.removeEventListener('resize', handleResize)
       if (rafId) cancelAnimationFrame(rafId)
       el.style.transform = ''
     }

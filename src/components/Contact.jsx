@@ -83,7 +83,7 @@ export default function Contact() {
       eyebrow="CONTACTO"
       subtitle="Hablemos sobre tu próximo proyecto"
     >
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 max-w-5xl mx-auto">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-12 xl:gap-16 max-w-5xl mx-auto">
         {/* ── Formulario ── */}
         <form onSubmit={handleSubmit} noValidate ref={sectionRef} className="reveal space-y-5">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

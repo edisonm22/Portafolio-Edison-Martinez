@@ -111,18 +111,18 @@ export default function Hero() {
 
         {/* CTAs magnéticos */}
         <div
-          className="flex flex-col sm:flex-row gap-4 reveal"
+          className="flex flex-col sm:flex-row gap-3 sm:gap-4 reveal"
           data-reveal-delay="350"
         >
-          <div ref={ctaRef} className="inline-block">
+          <div ref={ctaRef} className="sm:flex-1">
             <a
               href="#contact"
-              className="group relative inline-flex items-center gap-2.5 px-7 py-3.5 bg-primary text-black font-bold text-sm rounded-xl overflow-hidden transition-all duration-300 hover:shadow-button-glow active:scale-[0.98]"
+              className="group relative w-full inline-flex items-center justify-center gap-2.5 px-5 sm:px-7 py-3.5 bg-primary text-black font-bold text-sm rounded-xl overflow-hidden transition-all duration-300 hover:shadow-button-glow active:scale-[0.98]"
             >
               <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-              <span className="relative">Contratarme</span>
+              <span className="relative whitespace-nowrap">Contratarme</span>
               <svg
-                className="relative w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
+                className="relative w-4 h-4 shrink-0 transition-transform duration-300 group-hover:translate-x-1"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -132,13 +132,13 @@ export default function Hero() {
             </a>
           </div>
 
-          <div ref={projectsRef} className="inline-block">
+          <div ref={projectsRef} className="sm:flex-1">
             <a
               href="#projects"
-              className="group inline-flex items-center gap-2.5 px-7 py-3.5 border border-surface-800 text-surface-500 font-semibold text-sm rounded-xl transition-all duration-300 hover:border-primary/30 hover:text-light hover:bg-primary/5 active:scale-[0.98]"
+              className="group w-full inline-flex items-center justify-center gap-2.5 px-5 sm:px-7 py-3.5 border border-surface-800 text-surface-500 font-semibold text-sm rounded-xl transition-all duration-300 hover:border-primary/30 hover:text-light hover:bg-primary/5 active:scale-[0.98]"
             >
-              <span>Ver Proyectos</span>
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <span className="whitespace-nowrap">Ver Proyectos</span>
+              <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
               </svg>
             </a>

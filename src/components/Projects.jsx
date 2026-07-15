@@ -37,7 +37,7 @@ export default function Projects({ projects = FALLBACK_PROJECTS, loading = false
       eyebrow="PORTAFOLIO"
       subtitle="Trabajos seleccionados que reflejan mi experiencia"
     >
-      <div ref={sectionRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div ref={sectionRef} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         {projects.length === 0 ? (
           <p className="col-span-full text-center text-surface-600 py-16 font-medium">
             No hay proyectos disponibles actualmente
