@@ -42,6 +42,25 @@ export default function App() {
     return () => lenis.destroy()
   }, [])
 
+  /* ── Section title parallax ── */
+  useEffect(() => {
+    const handleScroll = () => {
+      const titles = document.querySelectorAll('[data-parallax-speed]')
+      titles.forEach((el) => {
+        const speed = parseFloat(el.dataset.parallaxSpeed) || 0.05
+        const rect = el.getBoundingClientRect()
+        const viewportCenter = window.innerHeight / 2
+        const elCenter = rect.top + rect.height / 2
+        const offset = (elCenter - viewportCenter) * speed
+        el.style.transform = `translateY(${offset.toFixed(1)}px)`
+      })
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll()
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
   return (
     <>
       {!loaderDone && <Loader onFinish={() => setLoaderDone(true)} />}

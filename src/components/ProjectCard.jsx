@@ -113,8 +113,8 @@ const ProjectCard = forwardRef(function ProjectCard({ project, index = 0 }, ref)
               'linear-gradient(var(--glare-angle, 0deg), rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 40%, transparent 60%)',
           }}
         />
-        {/* Image area with 3D parallax */}
-        <div ref={imageRef} className="relative aspect-[16/10] overflow-hidden will-change-transform" style={{ background: mesh }}>
+        {/* Image area with 3D parallax + breathing background */}
+        <div ref={imageRef} className="relative aspect-[16/10] overflow-hidden will-change-transform project-image-bg" style={{ background: mesh }}>
           <div className="absolute inset-0 bg-gradient-to-t from-surface-950/95 via-surface-950/40 to-transparent md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-500" />
 
           {/* Hover actions — siempre visibles en móvil, hover en desktop */}
