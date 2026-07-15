@@ -1,5 +1,6 @@
 import { forwardRef, useRef, useEffect } from 'react'
 import { getTechColor } from '../utils/techColors.js'
+import { useTilt3D } from '../hooks/useTilt3D.js'
 
 const gradientMeshes = [
   'linear-gradient(135deg, rgba(14,165,233,0.12), rgba(168,85,247,0.08), rgba(14,165,233,0.04))',
@@ -11,8 +12,20 @@ const gradientMeshes = [
 
 const ProjectCard = forwardRef(function ProjectCard({ project, index = 0 }, ref) {
   const cardRef = useRef(null)
+  const tiltRef = useTilt3D({ maxTilt: 6, scale: 1.02, speed: 500 })
   const techs = project.technologies || ['React', 'Node', 'MongoDB']
   const mesh = gradientMeshes[index % gradientMeshes.length]
+
+  /* ── Merge forwarded ref with tilt ref for scroll reveal ── */
+  useEffect(() => {
+    if (!ref) return
+    if (typeof ref === 'function') ref(tiltRef.current)
+    else ref.current = tiltRef.current
+    return () => {
+      if (typeof ref === 'function') ref(null)
+      else if (ref) ref.current = null
+    }
+  }, [ref])
 
   /* ── Spotlight effect (desktop only) ── */
   useEffect(() => {
@@ -33,19 +46,22 @@ const ProjectCard = forwardRef(function ProjectCard({ project, index = 0 }, ref)
 
   return (
     <article
-      ref={ref}
+      ref={tiltRef}
       data-reveal-delay={index * 100}
-      className="reveal group relative rounded-[1.25rem] rounded-tr-[0.5rem] rounded-bl-[0.5rem]"
+      className="reveal group relative rounded-[1.25rem] rounded-tr-[0.5rem] rounded-bl-[0.5rem] [transform-style:preserve-3d]"
+      style={{ perspective: '800px' }}
     >
       {/* Gradient border ring on hover */}
       <div
         className="absolute -inset-[1px] rounded-[calc(1.25rem+1px)] rounded-tr-[calc(0.5rem+1px)] rounded-bl-[calc(0.5rem+1px)] bg-gradient-to-r from-primary via-accent to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none animate-border-shimmer"
+        style={{ transform: 'translateZ(10px)' }}
       />
 
       {/* Card content with spotlight */}
       <div
         ref={cardRef}
         className="card-spotlight relative z-10 bg-surface-900 rounded-[1.25rem] rounded-tr-[0.5rem] rounded-bl-[0.5rem] overflow-hidden transition-all duration-500 group-hover:-translate-y-1"
+        style={{ transformStyle: 'preserve-3d' }}
       >
         {/* Image area */}
         <div className="relative aspect-[16/10] overflow-hidden" style={{ background: mesh }}>

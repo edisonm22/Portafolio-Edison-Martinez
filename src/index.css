@@ -112,6 +112,13 @@
 
   /* ── Animations ── */
   --animate-border-shimmer: border-shimmer 3s linear infinite;
+  --animate-rotate-3d-ring: rotate-3d-ring 14s linear infinite;
+  --animate-rotate-3d-ring-inner: rotate-3d-ring-inner 18s linear infinite;
+  --animate-orbit-3d: orbit-3d 10s linear infinite;
+  --animate-orbit-3d-reverse: orbit-3d-reverse 14s linear infinite;
+  --animate-float-3d-slow: float-3d-slow 6s ease-in-out infinite;
+  --animate-float-3d-slower: float-3d-slower 8s ease-in-out infinite;
+  --animate-pulse-glow-3d: pulse-glow-3d 4s ease-in-out infinite;
 }
 
 /* ═══════════════════════════════════════════
@@ -195,6 +202,44 @@
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
+}
+
+/* ── 3D Floating Ring ── */
+@keyframes rotate-3d-ring {
+  0%   { transform: rotateX(72deg) rotateY(0deg);   }
+  100% { transform: rotateX(72deg) rotateY(360deg); }
+}
+
+@keyframes rotate-3d-ring-inner {
+  0%   { transform: rotateX(72deg) rotateY(360deg); }
+  100% { transform: rotateX(72deg) rotateY(0deg);   }
+}
+
+/* ── 3D Orbital motion ── */
+@keyframes orbit-3d {
+  0%   { transform: rotate(0deg)   translateX(130px) rotate(0deg);   }
+  100% { transform: rotate(360deg) translateX(130px) rotate(-360deg); }
+}
+@keyframes orbit-3d-reverse {
+  0%   { transform: rotate(0deg)   translateX(90px) rotate(0deg);   }
+  100% { transform: rotate(-360deg) translateX(90px) rotate(360deg); }
+}
+
+/* ── Floating 3D float / bob ── */
+@keyframes float-3d-slow {
+  0%, 100% { transform: translate3d(0, 0, 0);         }
+  50%      { transform: translate3d(0, -16px, 20px);  }
+}
+
+@keyframes float-3d-slower {
+  0%, 100% { transform: translate3d(0, 0, 0);          }
+  50%      { transform: translate3d(8px, -12px, 10px); }
+}
+
+/* ── 3D Pulse glow ── */
+@keyframes pulse-glow-3d {
+  0%, 100% { opacity: 0.25; filter: blur(40px);   }
+  50%      { opacity: 0.45; filter: blur(70px);   }
 }
 
 /* ═══════════════════════════════════════════
@@ -366,6 +411,30 @@ html.reduced-motion .reveal[data-reveal-delay] {
 
 html.reduced-motion .section-num-animate {
   animation-duration: 0.05s;
+}
+
+/* ── reduced-motion: detiene todas las animaciones 3D ── */
+html.reduced-motion .animate-rotate-3d-ring,
+html.reduced-motion .animate-rotate-3d-ring-inner,
+html.reduced-motion .animate-orbit-3d,
+html.reduced-motion .animate-orbit-3d-reverse,
+html.reduced-motion .animate-float-3d-slow,
+html.reduced-motion .animate-float-3d-slower,
+html.reduced-motion .animate-pulse-glow-3d {
+  animation: none !important;
+}
+
+/* ── visible en pantalla ── */
+@media (prefers-reduced-motion: reduce) {
+  .animate-rotate-3d-ring,
+  .animate-rotate-3d-ring-inner,
+  .animate-orbit-3d,
+  .animate-orbit-3d-reverse,
+  .animate-float-3d-slow,
+  .animate-float-3d-slower,
+  .animate-pulse-glow-3d {
+    animation: none !important;
+  }
 }
 
 /* ═══════════════════════════════════════════

@@ -66,6 +66,75 @@ export default function Hero() {
           className="parallax-blob absolute bottom-1/4 -right-20 w-64 h-64 bg-accent/5 rounded-full blur-3xl"
           style={{ willChange: 'transform' }}
         />
+
+        {/* ── 3D Floating Scene (desktop only) ── */}
+        <div className="hidden lg:block absolute inset-0" style={{ perspective: '1200px' }}>
+          {/* Ring exterior */}
+          <div className="absolute top-[15%] right-[8%] w-[280px] h-[280px] animate-float-3d-slow" style={{ transformStyle: 'preserve-3d' }}>
+            <div
+              className="absolute inset-0 rounded-full border border-primary/15 animate-rotate-3d-ring"
+              style={{ transformStyle: 'preserve-3d', backfaceVisibility: 'hidden' }}
+            />
+            <div
+              className="absolute inset-[15%] rounded-full border border-accent/10 animate-rotate-3d-ring-inner"
+              style={{ transformStyle: 'preserve-3d', backfaceVisibility: 'hidden' }}
+            />
+            {/* Partículas orbitando */}
+            {[...Array(6)].map((_, i) => (
+              <div
+                key={i}
+                className="absolute inset-0 animate-orbit-3d"
+                style={{
+                  animationDelay: `${i * 0.8}s`,
+                  animationDuration: '12s',
+                }}
+              >
+                <div
+                  className="w-2 h-2 rounded-full bg-primary/40"
+                  style={{
+                    position: 'absolute',
+                    top: '-4px',
+                    left: '50%',
+                    marginLeft: '-4px',
+                  }}
+                />
+              </div>
+            ))}
+            {/* Partículas contrarotación */}
+            {[...Array(4)].map((_, i) => (
+              <div
+                key={`rev-${i}`}
+                className="absolute inset-0 animate-orbit-3d-reverse"
+                style={{
+                  animationDelay: `${i * 1.5}s`,
+                  animationDuration: '18s',
+                }}
+              >
+                <div
+                  className="w-1.5 h-1.5 rounded-full bg-accent/30"
+                  style={{
+                    position: 'absolute',
+                    top: '-3px',
+                    left: '50%',
+                    marginLeft: '-3px',
+                  }}
+                />
+              </div>
+            ))}
+          </div>
+
+          {/* Ring secundario (más pequeño, otro lado) */}
+          <div className="absolute bottom-[20%] left-[5%] w-[180px] h-[180px] animate-float-3d-slower" style={{ transformStyle: 'preserve-3d', animationDelay: '-5s' }}>
+            <div
+              className="absolute inset-0 rounded-full border border-cyan-400/10 animate-rotate-3d-ring-inner"
+              style={{ transformStyle: 'preserve-3d', animationDuration: '20s', backfaceVisibility: 'hidden' }}
+            />
+            <div
+              className="absolute inset-[20%] rounded-full border border-primary/8 animate-rotate-3d-ring"
+              style={{ transformStyle: 'preserve-3d', animationDuration: '15s', backfaceVisibility: 'hidden' }}
+            />
+          </div>
+        </div>
       </div>
 
       <div className="relative z-10 max-w-[65ch]">
