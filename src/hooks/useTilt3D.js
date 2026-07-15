@@ -80,7 +80,7 @@ export function useTilt3D({
   /* ── Mouse move ── */
   useEffect(() => {
     const el = ref.current
-    if (!el || reduced) return
+    if (!el || reduced || matchMedia('(pointer: coarse)').matches) return
 
     const refreshRect = () => {
       state.current.rect = el.getBoundingClientRect()
