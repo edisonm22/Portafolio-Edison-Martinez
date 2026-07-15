@@ -25,6 +25,7 @@ export default function App() {
       wheelMultiplier: 1,
     })
     lenisRef.current = lenis
+    window.__lenis = lenis // Exponer para scrollToSection
 
     // Bridge: re-dispatch Lenis scroll como evento nativo con progress
     lenis.on('scroll', (e) => {
