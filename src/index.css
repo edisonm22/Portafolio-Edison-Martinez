@@ -397,9 +397,58 @@ html.reduced-motion .loader-exit {
   transform: translateY(0) scale(1);
 }
 
+/* ── 3D Reveal variants ── */
+.reveal-3d-left {
+  opacity: 0;
+  transform: perspective(800px) rotateY(12deg) translateX(-30px) scale(0.95);
+  transition: opacity 0.9s var(--ease-out-expo),
+              transform 0.9s var(--ease-out-expo);
+}
+.reveal-3d-left.is-visible {
+  opacity: 1;
+  transform: perspective(800px) rotateY(0deg) translateX(0) scale(1);
+}
+
+.reveal-3d-right {
+  opacity: 0;
+  transform: perspective(800px) rotateY(-12deg) translateX(30px) scale(0.95);
+  transition: opacity 0.9s var(--ease-out-expo),
+              transform 0.9s var(--ease-out-expo);
+}
+.reveal-3d-right.is-visible {
+  opacity: 1;
+  transform: perspective(800px) rotateY(0deg) translateX(0) scale(1);
+}
+
+.reveal-3d-up {
+  opacity: 0;
+  transform: perspective(800px) rotateX(10deg) translateY(40px) scale(0.97);
+  transition: opacity 0.9s var(--ease-out-expo),
+              transform 0.9s var(--ease-out-expo);
+}
+.reveal-3d-up.is-visible {
+  opacity: 1;
+  transform: perspective(800px) rotateX(0deg) translateY(0) scale(1);
+}
+
+.reveal-3d-scale {
+  opacity: 0;
+  transform: perspective(800px) scale3d(0.88, 0.88, 0.88) translateY(20px);
+  transition: opacity 1s var(--ease-out-expo),
+              transform 1s var(--ease-out-expo);
+}
+.reveal-3d-scale.is-visible {
+  opacity: 1;
+  transform: perspective(800px) scale3d(1, 1, 1) translateY(0);
+}
+
 /* ── reduced-motion: anula animaciones ── */
 html.reduced-motion .reveal,
-html.reduced-motion .reveal[data-reveal-delay] {
+html.reduced-motion .reveal[data-reveal-delay],
+html.reduced-motion .reveal-3d-left,
+html.reduced-motion .reveal-3d-right,
+html.reduced-motion .reveal-3d-up,
+html.reduced-motion .reveal-3d-scale {
   opacity: 1;
   transform: none;
   transition: none;

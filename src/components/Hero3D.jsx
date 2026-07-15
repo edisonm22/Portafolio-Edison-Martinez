@@ -34,17 +34,19 @@ export default function Hero3D({ reduced = false }) {
     let w = 0, h = 0
 
     /* ── Init particles ── */
-    const P_COUNT = 65
-    const CONN_DIST = 140
-    const MOUSE_RADIUS = 180
-    const PARTICLE_SPEED = 0.35
+    const P_COUNT = 90
+    const CONN_DIST = 160
+    const MOUSE_RADIUS = 200
+    const PARTICLE_SPEED = 0.3
 
     function initParticles(width, height) {
       return Array.from({ length: P_COUNT }, () => ({
         x: Math.random() * width,
         y: Math.random() * height,
+        z: Math.random() * 3 + 0.5,         // ← profundidad 3D simulada (0.5–3.5)
         vx: (Math.random() - 0.5) * PARTICLE_SPEED,
         vy: (Math.random() - 0.5) * PARTICLE_SPEED,
+        vz: (Math.random() - 0.5) * 0.06,    // ← velocidad en Z
         r: Math.random() * 1.6 + 0.6,
         color: Math.random() > 0.5 ? COLORS.primary : COLORS.accent,
         phase: Math.random() * Math.PI * 2,
@@ -82,19 +84,24 @@ export default function Hero3D({ reduced = false }) {
 
       const particles = particlesRef.current
 
-      // Update positions
+      // Update positions (con profundidad Z 3D)
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i]
         p.x += p.vx + Math.sin(time * 0.0005 + p.phase) * 0.12
         p.y += p.vy + Math.cos(time * 0.0006 + p.phase) * 0.12
+        p.z += p.vz + Math.sin(time * 0.0003 + p.phase * 1.5) * 0.04
 
-        // Wrap
+        // Clamp Z
+        if (p.z < 0.3) p.z = 0.3
+        if (p.z > 4) p.z = 4
+
+        // Wrap XY
         if (p.x < -20) p.x = w + 20
         if (p.x > w + 20) p.x = -20
         if (p.y < -20) p.y = h + 20
         if (p.y > h + 20) p.y = -20
 
-        // Mouse repulsion
+        // Mouse repulsion (3D: también afecta Z)
         const dx = p.x - mouse.x
         const dy = p.y - mouse.y
         const dist = Math.sqrt(dx * dx + dy * dy)
@@ -102,41 +109,53 @@ export default function Hero3D({ reduced = false }) {
           const force = (MOUSE_RADIUS - dist) / MOUSE_RADIUS * 0.4
           p.x += (dx / dist) * force
           p.y += (dy / dist) * force
+          // Mouse empuja también en Z (efecto 3D)
+          p.z += (3 - p.z) * force * 0.02
         }
       }
 
-      // Draw connections + particles
-      for (let i = 0; i < particles.length; i++) {
-        const a = particles[i]
+      // Draw connections + particles (con profundidad Z)
+      // Ordenar por Z para dibujar atrás primero
+      const sorted = [...particles].sort((a, b) => a.z - b.z)
+
+      for (let i = 0; i < sorted.length; i++) {
+        const a = sorted[i]
+
+        // Factor de profundidad: cerca = grande + brillante
+        const depthFactor = (a.z - 0.3) / 3.7  // 0..1 (cerca→lejos)
+        const sizeMul = 1 + (1 - depthFactor) * 0.8
+        const alphaMul = 0.3 + (1 - depthFactor) * 0.5
+        const glowMul = (1 - depthFactor) * 0.6
 
         // Connections
-        for (let j = i + 1; j < particles.length; j++) {
-          const b = particles[j]
+        for (let j = i + 1; j < sorted.length; j++) {
+          const b = sorted[j]
           const dx = a.x - b.x
           const dy = a.y - b.y
           const dist = dx * dx + dy * dy
 
           if (dist < CONN_DIST * CONN_DIST) {
-            const alpha = (1 - Math.sqrt(dist) / CONN_DIST) * 0.25
+            const alpha = (1 - Math.sqrt(dist) / CONN_DIST) * 0.25 * (1 - depthFactor * 0.5)
             ctx.beginPath()
             ctx.moveTo(a.x, a.y)
             ctx.lineTo(b.x, b.y)
             ctx.strokeStyle = `rgba(${COLORS.primary}, ${alpha})`
-            ctx.lineWidth = 0.6
+            ctx.lineWidth = 0.4 + (1 - depthFactor) * 0.5
             ctx.stroke()
           }
         }
 
-        // Draw particle
+        // Draw particle (tamaño afectado por profundidad)
+        const drawR = a.r * sizeMul
         ctx.beginPath()
-        ctx.arc(a.x, a.y, a.r, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(${a.color}, 0.5)`
+        ctx.arc(a.x, a.y, drawR, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(${a.color}, ${0.3 + alphaMul * 0.4})`
         ctx.fill()
 
-        // Glow
+        // Glow (más grande y brillante si está cerca)
         ctx.beginPath()
-        ctx.arc(a.x, a.y, a.r * 3, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(${a.color}, 0.08)`
+        ctx.arc(a.x, a.y, drawR * (2 + glowMul * 3), 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(${a.color}, ${0.04 + glowMul * 0.1})`
         ctx.fill()
       }
 

@@ -85,7 +85,7 @@ export default function Contact() {
     >
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-12 xl:gap-16 max-w-5xl mx-auto">
         {/* ── Formulario ── */}
-        <form onSubmit={handleSubmit} noValidate ref={sectionRef} className="reveal space-y-5">
+        <form onSubmit={handleSubmit} noValidate ref={sectionRef} className="reveal-3d-left space-y-5">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <input
               type="text"
@@ -182,7 +182,7 @@ export default function Contact() {
         </form>
 
         {/* ── Info de contacto ── */}
-        <div className="space-y-8 reveal" data-reveal-delay="200">
+        <div className="space-y-8 reveal-3d-right" data-reveal-delay="200">
           <div>
             <h3 className="text-h3 text-light mb-2">Información de contacto</h3>
             <p className="text-muted text-body-sm leading-relaxed">

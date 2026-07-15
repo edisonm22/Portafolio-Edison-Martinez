@@ -22,13 +22,13 @@ export default function Services() {
     >
       <div
         ref={sectionRef}
-        className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 reveal"
+        className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 reveal-3d-up"
       >
         {services.map((service, index) => (
           <article
             key={service.title}
             data-reveal-delay={index * 100}
-            className="reveal group relative rounded-[1.25rem]"
+            className="reveal-3d-left group relative rounded-[1.25rem]"
           >
             {/* Gradient border ring on hover */}
             <div className="absolute -inset-[1px] rounded-[calc(1.25rem+1px)] bg-gradient-to-r from-primary via-accent to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none animate-border-shimmer" />
