@@ -13,28 +13,64 @@ const LOCATION = 'Remoto'
 /* ============================================================ */
 
 const initialForm = { name: '', email: '', subject: '', message: '' }
+const initialErrors = {}
 
 export default function Contact() {
   const [form, setForm] = useState(initialForm)
+  const [errors, setErrors] = useState(initialErrors)
+  const [touched, setTouched] = useState({})
   const [status, setStatus] = useState({ type: '', msg: '' })
   const [sending, setSending] = useState(false)
   const sectionRef = useScrollReveal()
 
+  /* ── Validación por campo ── */
+  const validate = (name, value) => {
+    const v = (value ?? form[name]).trim()
+    switch (name) {
+      case 'name':
+        return !v ? 'El nombre es obligatorio' : v.length < 2 ? 'Mínimo 2 caracteres' : ''
+      case 'email':
+        return !v ? 'El correo es obligatorio' : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) ? 'Correo no válido' : ''
+      case 'message':
+        return !v ? 'El mensaje es obligatorio' : v.length < 10 ? 'Mínimo 10 caracteres' : ''
+      default:
+        return ''
+    }
+  }
+
   const handleChange = (e) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }))
+    const { name, value } = e.target
+    setForm((prev) => ({ ...prev, [name]: value }))
+    // Clear field error on change if touched
+    if (touched[name]) {
+      setErrors((prev) => ({ ...prev, [name]: validate(name, value) }))
+    }
     if (status.msg) setStatus({ type: '', msg: '' })
+  }
+
+  const handleBlur = (e) => {
+    const { name, value } = e.target
+    setTouched((prev) => ({ ...prev, [name]: true }))
+    setErrors((prev) => ({ ...prev, [name]: validate(name, value) }))
+  }
+
+  /* ── Validar todo antes de enviar ── */
+  const validateAll = () => {
+    const newErrors = {}
+    Object.keys(initialForm).forEach((key) => {
+      if (key === 'subject') return // opcional
+      const err = validate(key, form[key])
+      if (err) newErrors[key] = err
+    })
+    setErrors(newErrors)
+    setTouched({ name: true, email: true, message: true })
+    return Object.keys(newErrors).length === 0
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-
-    /* ── Validación cliente ── */
-    if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
-      setStatus({ type: 'error', msg: 'Todos los campos obligatorios deben estar completos.' })
-      return
-    }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-      setStatus({ type: 'error', msg: 'Ingresa un correo electrónico válido.' })
+    if (!validateAll()) {
+      setStatus({ type: 'error', msg: 'Corrige los campos marcados antes de enviar.' })
       return
     }
 
@@ -59,6 +95,8 @@ export default function Contact() {
       if (data.success) {
         setStatus({ type: 'success', msg: '¡Mensaje enviado con éxito! Te responderé pronto.' })
         setForm(initialForm)
+        setErrors({})
+        setTouched({})
       } else {
         setStatus({ type: 'error', msg: data.message || 'Error al enviar el mensaje. Intenta de nuevo.' })
       }
@@ -72,8 +110,15 @@ export default function Contact() {
   const submitRef = useRef(null)
   useMagnetic(submitRef, { maxTranslate: 5, lerp: 0.13 })
 
-  const inputClass =
-    'w-full px-4 py-3.5 bg-surface-900 border border-surface-800 rounded-xl text-light text-sm placeholder:text-surface-700 transition-all duration-300 focus:outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/15 focus:bg-surface-850'
+  const inputBase =
+    'w-full px-4 py-3.5 rounded-xl text-light text-sm placeholder:text-surface-700 transition-all duration-300 focus:outline-none focus:ring-2'
+  const inputNormal =
+    'bg-surface-900 border border-surface-800 focus:border-primary/50 focus:ring-primary/15 focus:bg-surface-850'
+  const inputError =
+    'bg-red-900/20 border border-red-500/40 focus:border-red-400/60 focus:ring-red-500/20 focus:bg-red-900/30'
+
+  const inputClass = (field) =>
+    `${inputBase} ${errors[field] && touched[field] ? inputError : inputNormal}`
 
   return (
     <SectionWrapper
@@ -87,30 +132,46 @@ export default function Contact() {
         {/* ── Formulario ── */}
         <form onSubmit={handleSubmit} noValidate ref={sectionRef} className="reveal-3d-left space-y-5">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <input
-              type="text"
-              name="name"
-              placeholder="Nombre *"
-              value={form.name}
-              onChange={handleChange}
-              className={inputClass}
-              autoComplete="name"
-              aria-label="Nombre"
-              required
-              disabled={sending}
-            />
-            <input
-              type="email"
-              name="email"
-              placeholder="Correo *"
-              value={form.email}
-              onChange={handleChange}
-              className={inputClass}
-              autoComplete="email"
-              aria-label="Correo electrónico"
-              required
-              disabled={sending}
-            />
+            <div className="relative">
+              <input
+                type="text"
+                name="name"
+                placeholder="Nombre *"
+                value={form.name}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                className={inputClass('name')}
+                autoComplete="name"
+                aria-label="Nombre"
+                aria-invalid={!!errors.name && touched.name}
+                aria-describedby={errors.name && touched.name ? 'name-error' : undefined}
+                required
+                disabled={sending}
+              />
+              {errors.name && touched.name && (
+                <p id="name-error" className="text-red-400 text-[11px] mt-1.5 px-1" role="alert">{errors.name}</p>
+              )}
+            </div>
+            <div className="relative">
+              <input
+                type="email"
+                name="email"
+                placeholder="Correo *"
+                value={form.email}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                className={inputClass('email')}
+                autoComplete="email"
+                aria-label="Correo electrónico"
+                aria-invalid={!!errors.email && touched.email}
+                aria-describedby={errors.email && touched.email ? 'email-error' : undefined}
+                required
+                disabled={sending}
+              />
+              {errors.email && touched.email && (
+                <p id="email-error" className="text-red-400 text-[11px] mt-1.5 px-1" role="alert">{errors.email}</p>
+              )}
+            </div>
           </div>
           <input
             type="text"
@@ -118,21 +179,29 @@ export default function Contact() {
             placeholder="Asunto (opcional)"
             value={form.subject}
             onChange={handleChange}
-            className={inputClass}
+            className={inputBase + ' ' + inputNormal}
             aria-label="Asunto"
             disabled={sending}
           />
-          <textarea
-            name="message"
-            rows={5}
-            placeholder="Mensaje *"
-            value={form.message}
-            onChange={handleChange}
-            className={`${inputClass} resize-none`}
-            aria-label="Mensaje"
-            required
-            disabled={sending}
-          />
+          <div className="relative">
+            <textarea
+              name="message"
+              rows={5}
+              placeholder="Mensaje *"
+              value={form.message}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className={`${inputClass('message')} resize-none`}
+              aria-label="Mensaje"
+              aria-invalid={!!errors.message && touched.message}
+              aria-describedby={errors.message && touched.message ? 'message-error' : undefined}
+              required
+              disabled={sending}
+            />
+            {errors.message && touched.message && (
+              <p id="message-error" className="text-red-400 text-[11px] mt-1.5 px-1" role="alert">{errors.message}</p>
+            )}
+          </div>
 
           <p className="text-caption text-surface-700 -mt-2">
             * Campos obligatorios
