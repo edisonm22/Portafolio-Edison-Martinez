@@ -30,7 +30,7 @@ export default function SkillBar({ skill }) {
         <span className="text-[13px] font-semibold text-surface-400 tracking-wide">
           {skill.name}
         </span>
-        <span className={`text-[12px] font-mono font-medium tabular-nums transition-all duration-700 ${visible ? 'text-primary' : 'text-surface-600'}`}>
+        <span className={`text-[12px] font-mono font-medium tabular-nums transition-all duration-700 ${visible ? 'text-primary' : 'text-surface-400'}`}>
           {visible ? percentage : 0}%
         </span>
       </div>

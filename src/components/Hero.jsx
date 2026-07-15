@@ -250,7 +250,7 @@ export default function Hero() {
           <div ref={projectsRef} className="sm:flex-1">
             <a
               href="#projects"
-              className="group w-full inline-flex items-center justify-center gap-2.5 px-5 sm:px-7 py-3.5 border border-surface-800 text-surface-500 font-semibold text-sm rounded-xl transition-all duration-300 hover:border-primary/30 hover:text-light hover:bg-primary/5 active:scale-[0.98]"
+              className="group w-full inline-flex items-center justify-center gap-2.5 px-5 sm:px-7 py-3.5 border border-surface-800 text-surface-400 font-semibold text-sm rounded-xl transition-all duration-300 hover:border-primary/30 hover:text-light hover:bg-primary/5 active:scale-[0.98]"
             >
               <span className="whitespace-nowrap">Ver Proyectos</span>
               <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -268,18 +268,18 @@ export default function Hero() {
         >
           <div>
             <CounterValue target={5} suffix="+" visible={countersVisible} />
-            <span className="text-surface-700 ml-2">a&ntilde;os exp.</span>
+            <span className="text-surface-400 ml-2">a&ntilde;os exp.</span>
           </div>
           <span className="hidden sm:block w-px h-4 bg-surface-800" />
           <div className="w-full sm:w-auto h-px sm:hidden bg-surface-800" />
           <div>
             <CounterValue target={15} suffix="+" visible={countersVisible} />
-            <span className="text-surface-700 ml-2">proyectos</span>
+            <span className="text-surface-400 ml-2">proyectos</span>
           </div>
           <span className="hidden sm:block w-px h-4 bg-surface-800" />
           <div>
             <CounterValue target={100} suffix="%" visible={countersVisible} />
-            <span className="text-surface-700 ml-2">satisf.</span>
+            <span className="text-surface-400 ml-2">satisf.</span>
           </div>
         </div>
       </div>
@@ -291,7 +291,7 @@ export default function Hero() {
         }`}
         aria-hidden="true"
       >
-        <span className="text-[10px] font-mono text-surface-500 tracking-[0.2em] uppercase">
+        <span className="text-[10px] font-mono text-surface-400 tracking-[0.2em] uppercase">
           Scroll
         </span>
         <div className="w-5 h-8 border-2 border-surface-600/60 rounded-full flex justify-center">
@@ -338,7 +338,7 @@ function TypedSubtitle({ reduced, onDone }) {
 
   return (
     <p
-      className="font-mono text-base sm:text-lg text-surface-500 mb-6 reveal"
+      className="font-mono text-base sm:text-lg text-surface-400 mb-6 reveal"
       data-reveal-delay="200"
       data-depth="1.2"
     >

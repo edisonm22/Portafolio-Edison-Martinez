@@ -111,7 +111,7 @@ export default function Contact() {
   useMagnetic(submitRef, { maxTranslate: 5, lerp: 0.13 })
 
   const inputBase =
-    'w-full px-4 py-3.5 rounded-xl text-light text-sm placeholder:text-surface-700 transition-all duration-300 focus:outline-none focus:ring-2'
+    'w-full px-4 py-3.5 rounded-xl text-light text-sm placeholder:text-surface-400 transition-all duration-300 focus:outline-none focus:ring-2'
   const inputNormal =
     'bg-surface-900 border border-surface-800 focus:border-primary/50 focus:ring-primary/15 focus:bg-surface-850'
   const inputError =
@@ -203,7 +203,7 @@ export default function Contact() {
             )}
           </div>
 
-          <p className="text-caption text-surface-700 -mt-2">
+          <p className="text-caption text-surface-500 -mt-2">
             * Campos obligatorios
           </p>
 
@@ -320,7 +320,7 @@ function ContactItem({ icon, label, value, href }) {
         {icon}
       </span>
       <div className="min-w-0">
-        <p className="text-caption text-surface-600 uppercase tracking-wider">{label}</p>
+        <p className="text-caption text-surface-400 uppercase tracking-wider">{label}</p>
         <p className="text-body-sm text-light font-medium truncate">{value}</p>
       </div>
     </div>
@@ -339,7 +339,7 @@ function SocialLink({ href, label, children }) {
       target="_blank"
       rel="noopener noreferrer"
       aria-label={label}
-      className="w-11 h-11 flex items-center justify-center rounded-xl bg-surface-900 border border-surface-800 text-surface-500 transition-all duration-300 hover:bg-primary/10 hover:border-primary/30 hover:text-primary hover:shadow-glow-primary"
+      className="w-11 h-11 flex items-center justify-center rounded-xl bg-surface-900 border border-surface-800 text-surface-400 transition-all duration-300 hover:bg-primary/10 hover:border-primary/30 hover:text-primary hover:shadow-glow-primary"
     >
       {children}
     </a>

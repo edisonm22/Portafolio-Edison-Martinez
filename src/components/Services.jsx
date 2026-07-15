@@ -66,7 +66,7 @@ export default function Services() {
                 {(service.techs || defaultTechs(index)).map((tech, i) => (
                   <span
                     key={tech}
-                    className="tech-tag px-2 py-0.5 text-[11px] font-mono font-medium text-surface-600 bg-surface-950 rounded-full border border-surface-800"
+                    className="tech-tag px-2 py-0.5 text-[11px] font-mono font-medium text-surface-400 bg-surface-950 rounded-full border border-surface-800"
                     style={{ transitionDelay: `${i * 30}ms` }}
                   >
                     {tech}

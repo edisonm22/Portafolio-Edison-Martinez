@@ -72,7 +72,7 @@ export default function Skills({ loading = false }) {
               </div>
               <div>
                 <h3 className="text-h3 text-light">{cat.category}</h3>
-                <p className="text-surface-600 text-sm font-mono">
+                <p className="text-surface-400 text-sm font-mono">
                   {cat.skills.length} tecnologías
                 </p>
               </div>
