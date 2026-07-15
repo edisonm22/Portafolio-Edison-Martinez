@@ -18,7 +18,7 @@ export default function App() {
       <Cursor />
       <SkipLink />
       <div className="noise-overlay" />
-      <main id="main" className="lg:ml-[40%] min-h-screen pt-16 lg:pt-0 max-w-full overflow-x-hidden">
+      <main id="main" className="lg:ml-72 min-h-screen pt-16 lg:pt-0 max-w-full overflow-x-hidden">
         <Hero />
         <Projects />
         <Skills />
