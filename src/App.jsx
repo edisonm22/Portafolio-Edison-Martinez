@@ -13,13 +13,15 @@ export default function App() {
   const [loaderDone, setLoaderDone] = useState(false)
   const lenisRef = useRef(null)
 
-  /* ── Lenis smooth scroll ── */
+  /* ── Lenis smooth scroll (desactivado si prefers-reduced-motion) ── */
   useEffect(() => {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
     const lenis = new Lenis({
-      duration: 1.2,
+      duration: reduced ? 0 : 1.2,
       easing: (t) => Math.min(1, 1 - Math.pow(1 - t, 3)),
       orientation: 'vertical',
-      smoothWheel: true,
+      smoothWheel: !reduced,
       wheelMultiplier: 1,
     })
     lenisRef.current = lenis

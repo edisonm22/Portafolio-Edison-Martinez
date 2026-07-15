@@ -361,6 +361,12 @@ function CounterValue({ target, suffix, visible }) {
     if (!visible || animated.current) return
     animated.current = true
 
+    // Si prefiere animaciones reducidas, mostrar valor final inmediatamente
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setValue(target)
+      return
+    }
+
     const duration = 1200
     const start = performance.now()
 
