@@ -12,7 +12,7 @@ export function SectionWrapper({
   return (
     <section
       id={id}
-      className={`relative py-section-mobile lg:py-section px-6 sm:px-8 lg:px-12 overflow-hidden ${className}`}
+      className={`section-grid-bg relative py-section-mobile lg:py-section px-6 sm:px-8 lg:px-12 overflow-hidden ${className}`}
     >
       {/* Línea divisoria editorial */}
       <div className="section-divider mb-8 lg:mb-12" />

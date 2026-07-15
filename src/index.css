@@ -525,6 +525,87 @@ html.reduced-motion .loader-exit {
   transform: perspective(800px) scale3d(1, 1, 1) translateY(0);
 }
 
+/* ── Hero blob morphing ── */
+@keyframes blob-morph-1 {
+  0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; transform: translate3d(0,0,0) scale(1); }
+  25%      { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; transform: translate3d(10px,-15px,0) scale(1.05); }
+  50%      { border-radius: 50% 50% 50% 50% / 40% 50% 50% 60%; transform: translate3d(-5px,10px,0) scale(0.95); }
+  75%      { border-radius: 40% 30% 60% 50% / 60% 40% 60% 40%; transform: translate3d(15px,5px,0) scale(1.02); }
+}
+@keyframes blob-morph-2 {
+  0%, 100% { border-radius: 40% 60% 50% 50% / 50% 40% 60% 50%; transform: translate3d(0,0,0) scale(1); }
+  33%      { border-radius: 60% 40% 40% 60% / 40% 60% 40% 60%; transform: translate3d(-12px,8px,0) scale(1.08); }
+  66%      { border-radius: 50% 40% 60% 40% / 60% 40% 50% 50%; transform: translate3d(8px,-12px,0) scale(0.92); }
+}
+@keyframes blob-morph-3 {
+  0%, 100% { border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%; transform: translate3d(0,0,0) scale(1); opacity: 0.03; }
+  50%      { border-radius: 60% 40% 50% 50% / 40% 60% 40% 60%; transform: translate3d(20px,-20px,0) scale(1.1); opacity: 0.06; }
+}
+
+.blob-morph-1 {
+  animation: blob-morph-1 12s ease-in-out infinite;
+  will-change: transform, border-radius;
+}
+.blob-morph-2 {
+  animation: blob-morph-2 10s ease-in-out infinite;
+  will-change: transform, border-radius;
+}
+.blob-morph-3 {
+  animation: blob-morph-3 15s ease-in-out infinite;
+  will-change: transform, border-radius;
+}
+
+/* ── Scroll dot animation ── */
+@keyframes scroll-dot-bounce {
+  0%, 100% { transform: translateY(0); opacity: 1; }
+  50%      { transform: translateY(6px); opacity: 0.3; }
+}
+.animate-scroll-dot {
+  animation: scroll-dot-bounce 2s ease-in-out infinite;
+}
+
+/* ── Animated gradient border for CTA buttons ── */
+@keyframes border-rotate {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.btn-gradient-border {
+  position: relative;
+  isolation: isolate;
+}
+.btn-gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent), var(--color-glow), var(--color-primary));
+  background-size: 300% 300%;
+  animation: border-rotate 4s ease-in-out infinite;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.btn-gradient-border:hover::before {
+  opacity: 1;
+}
+
+/* ── Animated grid background pattern ── */
+.section-grid-bg {
+  position: relative;
+}
+.section-grid-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(14, 165, 233, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(14, 165, 233, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
 /* ── reduced-motion: anula animaciones ── */
 html.reduced-motion .reveal,
 html.reduced-motion .reveal[data-reveal-delay],
@@ -561,7 +642,11 @@ html.reduced-motion .animate-pulse-glow-3d,
 html.reduced-motion .animate-hex-3d,
 html.reduced-motion .animate-diamond-3d,
 html.reduced-motion .animate-triangle-3d,
-html.reduced-motion .animate-ring-glow-3d {
+html.reduced-motion .animate-ring-glow-3d,
+html.reduced-motion .blob-morph-1,
+html.reduced-motion .blob-morph-2,
+html.reduced-motion .blob-morph-3,
+html.reduced-motion .animate-scroll-dot {
   animation: none !important;
 }
 

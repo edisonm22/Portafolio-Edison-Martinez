@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 import { useReducedMotion } from '../hooks/useReducedMotion.js'
 import { useMagnetic } from '../hooks/useMagnetic.js'
 import { useScrollReveal } from '../hooks/useScrollReveal.js'
@@ -13,6 +13,8 @@ export default function Hero() {
   const [countersVisible, setCountersVisible] = useState(false)
   const countersRef = useRef(null)
   const [wordRevealDone, setWordRevealDone] = useState(false)
+  const [typingDone, setTypingDone] = useState(false)
+  const [showScrollIndicator, setShowScrollIndicator] = useState(false)
 
   useMagnetic(ctaRef, { maxTranslate: 6, lerp: 0.15 })
   useMagnetic(projectsRef, { maxTranslate: 6, lerp: 0.15 })
@@ -24,6 +26,13 @@ export default function Hero() {
       return
     }
     const t = setTimeout(() => setWordRevealDone(true), 800)
+    return () => clearTimeout(t)
+  }, [reduced])
+
+  /* ── Mostrar scroll indicator tras typing ── */
+  useEffect(() => {
+    if (reduced) { setShowScrollIndicator(true); return }
+    const t = setTimeout(() => setShowScrollIndicator(true), 2000)
     return () => clearTimeout(t)
   }, [reduced])
 
@@ -128,14 +137,18 @@ export default function Hero() {
           'radial-gradient(ellipse 70% 40% at 0% 50%, rgba(14, 165, 233, 0.08) 0%, transparent 65%), radial-gradient(ellipse 40% 30% at 100% 80%, rgba(168, 85, 247, 0.06) 0%, transparent 55%), var(--color-surface-950)',
       }}
     >
-      {/* Blobs con parallax */}
+      {/* Blobs con parallax + morphing */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div
-          className="parallax-blob absolute -top-24 -left-24 w-72 h-72 bg-primary/5 rounded-full blur-3xl"
+          className="parallax-blob blob-morph-1 absolute -top-24 -left-24 w-72 h-72 bg-primary/5 rounded-full blur-3xl"
           style={{ willChange: 'transform' }}
         />
         <div
-          className="parallax-blob absolute bottom-1/4 -right-20 w-64 h-64 bg-accent/5 rounded-full blur-3xl"
+          className="parallax-blob blob-morph-2 absolute bottom-1/4 -right-20 w-64 h-64 bg-accent/5 rounded-full blur-3xl"
+          style={{ willChange: 'transform' }}
+        />
+        <div
+          className="parallax-blob blob-morph-3 absolute top-1/3 left-1/2 -translate-x-1/2 w-96 h-96 bg-accent/3 rounded-full blur-3xl"
           style={{ willChange: 'transform' }}
         />
 
@@ -176,13 +189,7 @@ export default function Hero() {
           </span>
         </h1>
 
-        <p
-          className="font-mono text-base sm:text-lg text-surface-500 mb-6 reveal"
-          data-reveal-delay="200"
-          data-depth="1.2"
-        >
-          {'< Full-Stack Developer />'}
-        </p>
+        <TypedSubtitle reduced={reduced} onDone={() => setTypingDone(true)} />
 
         <p
           className="text-surface-400 text-base sm:text-lg leading-relaxed mb-10 reveal"
@@ -204,7 +211,7 @@ export default function Hero() {
           <div ref={ctaRef} className="sm:flex-1">
             <a
               href="#contact"
-              className="group relative w-full inline-flex items-center justify-center gap-2.5 px-5 sm:px-7 py-3.5 bg-primary text-black font-bold text-sm rounded-xl overflow-hidden transition-all duration-300 hover:shadow-button-glow active:scale-[0.98]"
+              className="btn-gradient-border group relative w-full inline-flex items-center justify-center gap-2.5 px-5 sm:px-7 py-3.5 bg-primary text-black font-bold text-sm rounded-xl overflow-hidden transition-all duration-300 hover:shadow-button-glow active:scale-[0.98]"
             >
               <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
               <span className="relative whitespace-nowrap">Contratarme</span>
@@ -255,7 +262,71 @@ export default function Hero() {
           </div>
         </div>
       </div>
+
+      {/* ── Scroll-down indicator (desktop only) ── */}
+      <div
+        className={`absolute bottom-8 left-1/2 -translate-x-1/2 hidden lg:flex flex-col items-center gap-2 transition-all duration-1000 ${
+          showScrollIndicator ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+        }`}
+      >
+        <span className="text-[10px] font-mono text-surface-600 tracking-[0.2em] uppercase">
+          Scroll
+        </span>
+        <div className="w-5 h-8 border-2 border-surface-700 rounded-full flex justify-center">
+          <div className="w-1 h-2.5 bg-primary rounded-full mt-2 animate-scroll-dot" />
+        </div>
+      </div>
     </header>
+  )
+}
+
+/* ── Typing effect for subtitle ── */
+function TypedSubtitle({ reduced, onDone }) {
+  const fullText = '< Full-Stack Developer />'
+  const [displayed, setDisplayed] = useState(reduced ? fullText : '')
+  const [cursorVisible, setCursorVisible] = useState(true)
+
+  useEffect(() => {
+    if (reduced) {
+      setDisplayed(fullText)
+      onDone?.()
+      return
+    }
+
+    let idx = 0
+    const interval = setInterval(() => {
+      idx++
+      setDisplayed(fullText.slice(0, idx))
+      if (idx >= fullText.length) {
+        clearInterval(interval)
+        onDone?.()
+      }
+    }, 40)
+
+    // Blinking cursor
+    const cursorInterval = setInterval(() => {
+      setCursorVisible((v) => !v)
+    }, 530)
+
+    return () => {
+      clearInterval(interval)
+      clearInterval(cursorInterval)
+    }
+  }, [reduced, onDone])
+
+  return (
+    <p
+      className="font-mono text-base sm:text-lg text-surface-500 mb-6 reveal"
+      data-reveal-delay="200"
+      data-depth="1.2"
+    >
+      {displayed}
+      <span
+        className={`inline-block w-[2px] h-[1em] bg-primary ml-0.5 align-middle transition-opacity duration-100 ${
+          cursorVisible ? 'opacity-100' : 'opacity-0'
+        }`}
+      />
+    </p>
   )
 }
 
