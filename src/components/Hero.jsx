@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useReducedMotion } from '../hooks/useReducedMotion.js'
 import { useMagnetic } from '../hooks/useMagnetic.js'
 import { useScrollReveal } from '../hooks/useScrollReveal.js'
@@ -10,9 +10,39 @@ export default function Hero() {
   const ctaRef = useRef(null)
   const projectsRef = useRef(null)
   const depthLayersRef = useRef([])
+  const [countersVisible, setCountersVisible] = useState(false)
+  const countersRef = useRef(null)
+  const [wordRevealDone, setWordRevealDone] = useState(false)
 
   useMagnetic(ctaRef, { maxTranslate: 6, lerp: 0.15 })
   useMagnetic(projectsRef, { maxTranslate: 6, lerp: 0.15 })
+
+  /* ── Word-by-word reveal del H1 ── */
+  useEffect(() => {
+    if (reduced) {
+      setWordRevealDone(true)
+      return
+    }
+    const t = setTimeout(() => setWordRevealDone(true), 800)
+    return () => clearTimeout(t)
+  }, [reduced])
+
+  /* ── Animated counters al entrar en viewport ── */
+  useEffect(() => {
+    const el = countersRef.current
+    if (!el) return
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setCountersVisible(true)
+          obs.unobserve(el)
+        }
+      },
+      { threshold: 0.3 }
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
 
   /* ── Parallax sutil en los blobs ── */
   useEffect(() => {
@@ -129,11 +159,17 @@ export default function Hero() {
             className="block font-display font-bold leading-[0.95] tracking-[-0.03em] text-light"
             style={{ fontSize: 'clamp(2.8rem, 9vw, 6.5rem)' }}
           >
-            Edison
+            <span className={`word-reveal-container ${wordRevealDone ? 'word-reveal-done' : ''}`}>
+              <span className="word-reveal-word" style={{ '--word-delay': '0ms' }}>
+                Edison
+              </span>
+            </span>
             <br />
             <span className="relative inline-block mt-1">
-              <span className="bg-gradient-to-r from-light via-primary to-accent bg-clip-text text-transparent">
-                Martinez
+              <span className={`word-reveal-container ${wordRevealDone ? 'word-reveal-done' : ''}`}>
+                <span className="word-reveal-word gradient-text-animated" style={{ '--word-delay': '120ms' }}>
+                  Martinez
+                </span>
               </span>
               <span className="absolute -bottom-1 left-0 right-0 h-[3px] bg-gradient-to-r from-primary/60 to-accent/60 rounded-full blur-[1px]" />
             </span>
@@ -196,28 +232,60 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Stats */}
+        {/* Stats with animated counters */}
         <div
+          ref={countersRef}
           className="mt-12 sm:mt-14 flex flex-wrap items-center gap-x-8 gap-y-3 font-mono text-sm reveal"
           data-reveal-delay="450"
         >
           <div>
-            <span className="font-bold text-light text-lg">5+</span>
+            <CounterValue target={5} suffix="+" visible={countersVisible} />
             <span className="text-surface-700 ml-2">a&ntilde;os exp.</span>
           </div>
           <span className="hidden sm:block w-px h-4 bg-surface-800" />
           <div className="w-full sm:w-auto h-px sm:hidden bg-surface-800" />
           <div>
-            <span className="font-bold text-light text-lg">15+</span>
+            <CounterValue target={15} suffix="+" visible={countersVisible} />
             <span className="text-surface-700 ml-2">proyectos</span>
           </div>
           <span className="hidden sm:block w-px h-4 bg-surface-800" />
           <div>
-            <span className="font-bold text-light text-lg">100%</span>
+            <CounterValue target={100} suffix="%" visible={countersVisible} />
             <span className="text-surface-700 ml-2">satisf.</span>
           </div>
         </div>
       </div>
     </header>
+  )
+}
+
+/* ── Animated counter component ── */
+function CounterValue({ target, suffix, visible }) {
+  const [value, setValue] = useState(0)
+  const animated = useRef(false)
+
+  useEffect(() => {
+    if (!visible || animated.current) return
+    animated.current = true
+
+    const duration = 1200
+    const start = performance.now()
+
+    const update = (now) => {
+      const elapsed = now - start
+      const progress = Math.min(1, elapsed / duration)
+      // Ease-out quad
+      const eased = 1 - Math.pow(1 - progress, 2)
+      setValue(Math.round(eased * target))
+      if (progress < 1) requestAnimationFrame(update)
+    }
+
+    requestAnimationFrame(update)
+  }, [visible, target])
+
+  return (
+    <span className="font-bold text-light text-lg tabular-nums">
+      {value}{suffix}
+    </span>
   )
 }

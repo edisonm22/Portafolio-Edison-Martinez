@@ -15,6 +15,8 @@ const ProjectCard = forwardRef(function ProjectCard({ project, index = 0 }, ref)
   const tiltRef = useTilt3D({ maxTilt: 6, scale: 1.02, speed: 500 })
   const techs = project.technologies || ['React', 'Node', 'MongoDB']
   const mesh = gradientMeshes[index % gradientMeshes.length]
+  const imageRef = useRef(null)
+  const imageParallax = useRef({ x: 0, y: 0, targetX: 0, targetY: 0 })
 
   /* ── Merge forwarded ref with tilt ref for scroll reveal ── */
   useEffect(() => {
@@ -26,6 +28,46 @@ const ProjectCard = forwardRef(function ProjectCard({ project, index = 0 }, ref)
       else if (ref) ref.current = null
     }
   }, [ref])
+
+  /* ── 3D parallax hover en el área de imagen ── */
+  useEffect(() => {
+    const img = imageRef.current
+    if (!img || matchMedia('(pointer: coarse)').matches) return
+
+    let rafId = null
+    const p = imageParallax.current
+
+    const onMove = (e) => {
+      const rect = img.getBoundingClientRect()
+      const x = ((e.clientX - rect.left) / rect.width - 0.5) * 2
+      const y = ((e.clientY - rect.top) / rect.height - 0.5) * 2
+      p.targetX = x * 8
+      p.targetY = y * 8
+    }
+
+    const onLeave = () => {
+      p.targetX = 0
+      p.targetY = 0
+    }
+
+    const animate = () => {
+      p.x += (p.targetX - p.x) * 0.1
+      p.y += (p.targetY - p.y) * 0.1
+      img.style.transform = `translate(${p.x.toFixed(1)}px, ${p.y.toFixed(1)}px) scale(1.08)`
+      rafId = requestAnimationFrame(animate)
+    }
+
+    img.addEventListener('mousemove', onMove, { passive: true })
+    img.addEventListener('mouseleave', onLeave)
+    rafId = requestAnimationFrame(animate)
+
+    return () => {
+      img.removeEventListener('mousemove', onMove)
+      img.removeEventListener('mouseleave', onLeave)
+      if (rafId) cancelAnimationFrame(rafId)
+      img.style.transform = ''
+    }
+  }, [])
 
   /* ── Spotlight effect (desktop only) ── */
   useEffect(() => {
@@ -71,8 +113,8 @@ const ProjectCard = forwardRef(function ProjectCard({ project, index = 0 }, ref)
               'linear-gradient(var(--glare-angle, 0deg), rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 40%, transparent 60%)',
           }}
         />
-        {/* Image area */}
-        <div className="relative aspect-[16/10] overflow-hidden" style={{ background: mesh }}>
+        {/* Image area with 3D parallax */}
+        <div ref={imageRef} className="relative aspect-[16/10] overflow-hidden will-change-transform" style={{ background: mesh }}>
           <div className="absolute inset-0 bg-gradient-to-t from-surface-950/95 via-surface-950/40 to-transparent md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-500" />
 
           {/* Hover actions — siempre visibles en móvil, hover en desktop */}

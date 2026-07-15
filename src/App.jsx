@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import Lenis from 'lenis'
 import Sidebar from './components/Sidebar.jsx'
 import Loader from './components/Loader.jsx'
 import Cursor from './components/Cursor.jsx'
@@ -10,6 +11,36 @@ import Contact from './components/Contact.jsx'
 
 export default function App() {
   const [loaderDone, setLoaderDone] = useState(false)
+  const lenisRef = useRef(null)
+
+  /* ── Lenis smooth scroll ── */
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1 - Math.pow(1 - t, 3)),
+      orientation: 'vertical',
+      smoothWheel: true,
+      wheelMultiplier: 1,
+    })
+    lenisRef.current = lenis
+
+    // Bridge: re-dispatch Lenis scroll como evento nativo con progress
+    lenis.on('scroll', (e) => {
+      window.dispatchEvent(
+        new CustomEvent('lenis-scroll', {
+          detail: { scroll: e.scroll, limit: e.limit, progress: e.progress },
+        })
+      )
+    })
+
+    function raf(time) {
+      lenis.raf(time)
+      requestAnimationFrame(raf)
+    }
+    requestAnimationFrame(raf)
+
+    return () => lenis.destroy()
+  }, [])
 
   return (
     <>

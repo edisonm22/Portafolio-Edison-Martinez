@@ -73,6 +73,10 @@ export default function HeroThreeScene({ reduced = false }) {
         renderer.setClearColor(0x0a0f1a, 0)
         container.appendChild(renderer.domElement)
 
+        /* ── 4b. Entrance: valores iniciales para fade-in ── */
+        const ENTRANCE_DURATION = 1.5 // segundos
+        let entranceProgress = 0
+
         /* ── 5. Starfield (400 estrellas) ── */
         const starCount = 400
         const starGeo = new THREE.BufferGeometry()
@@ -147,6 +151,14 @@ export default function HeroThreeScene({ reduced = false }) {
         const innerParticles = new THREE.Points(innerGeo, innerMat)
         scene.add(innerParticles)
 
+        /* ── 8b. Entrance: inicializar objetos invisibles ── */
+        knot.scale.setScalar(0)
+        knotMat.opacity = 0
+        wireframe.scale.setScalar(0)
+        wireMat.opacity = 0
+        starMat.opacity = 0
+        innerMat.opacity = 0
+
         /* ── 9. Mouse tracking ── */
         const mouse = { x: 0, y: 0, targetX: 0, targetY: 0 }
 
@@ -177,10 +189,49 @@ export default function HeroThreeScene({ reduced = false }) {
 
         /* ── 11. Animation loop ── */
         const clock = new THREE.Clock()
+        let scrollOffset = 0
+
+        // Scroll-linked camera: leer scroll del Hero
+        const onScroll = () => {
+          try {
+            const heroRect = container.closest('header')?.getBoundingClientRect()
+            if (heroRect) {
+              const heroHeight = heroRect.height
+              const scrolled = -heroRect.top
+              const progress = Math.max(0, Math.min(1, scrolled / heroHeight))
+              // Camera se aleja de z=6 a z=11 al hacer scroll
+              scrollOffset = progress * 5
+            }
+          } catch { /* ignore */ }
+        }
+        window.addEventListener('scroll', onScroll, { passive: true })
+
         function animate() {
           if (!mounted) return
           try {
             const elapsed = clock.getElapsedTime()
+
+            // ── Entrance animation (primeros 1.5s) ──
+            if (entranceProgress < 1) {
+              entranceProgress = Math.min(1, elapsed / ENTRANCE_DURATION)
+              // Cubic ease-out
+              const ease = 1 - Math.pow(1 - entranceProgress, 3)
+
+              knot.scale.setScalar(ease)
+              wireframe.scale.setScalar(ease)
+              knotMat.opacity = ease * (0.6 + Math.sin(elapsed * 0.5) * 0.15)
+              wireMat.opacity = ease * 0.08
+              starMat.opacity = ease * 0.4
+              innerMat.opacity = ease * 0.25
+            } else {
+              // Post-entrance: comportamiento normal
+              knotMat.opacity = 0.6 + Math.sin(elapsed * 0.5) * 0.15
+            }
+
+            // ── Scroll-linked camera ──
+            camera.position.z = 6 + scrollOffset
+
+            // ── Mouse & auto rotation ──
             mouse.x += (mouse.targetX - mouse.x) * 0.05
             mouse.y += (mouse.targetY - mouse.y) * 0.05
             const autoRotY = elapsed * 0.08
@@ -193,7 +244,7 @@ export default function HeroThreeScene({ reduced = false }) {
             stars.rotation.x = elapsed * 0.004
             innerParticles.rotation.x = elapsed * 0.02 + mouse.y * 0.1
             innerParticles.rotation.y = elapsed * 0.04 + mouse.x * 0.15
-            knotMat.opacity = 0.6 + Math.sin(elapsed * 0.5) * 0.15
+
             renderer.render(scene, camera)
           } catch { /* fallo silencioso en frame */ }
           rafId = requestAnimationFrame(animate)
@@ -208,6 +259,7 @@ export default function HeroThreeScene({ reduced = false }) {
             container.removeEventListener('mousemove', onMouse)
             container.removeEventListener('mouseleave', onLeave)
             window.removeEventListener('resize', onResize)
+            window.removeEventListener('scroll', onScroll)
             renderer.dispose()
             scene.clear()
             if (container.contains(renderer.domElement)) {

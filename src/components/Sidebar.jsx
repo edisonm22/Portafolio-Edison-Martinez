@@ -36,9 +36,10 @@ export default function Sidebar() {
   useEffect(() => {
     if (reduced) return
 
-    const update = () => {
+    const update = (virtualScroll) => {
       const docEl = document.documentElement
-      const scrollTop = docEl.scrollTop || document.body.scrollTop
+      // Si viene de Lenis, usar su scroll virtual; si no, usar scrollTop nativo
+      const scrollTop = virtualScroll ?? docEl.scrollTop ?? document.body.scrollTop ?? 0
       const scrollHeight = docEl.scrollHeight - docEl.clientHeight
       setScrollProgress(scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0)
     }
@@ -51,8 +52,20 @@ export default function Sidebar() {
       }
     }
 
+    const onLenisScroll = (e) => {
+      if (!ticking) {
+        requestAnimationFrame(() => { update(e.detail.scroll); ticking = false })
+        ticking = true
+      }
+    }
+
     window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    window.addEventListener('lenis-scroll', onLenisScroll)
+
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('lenis-scroll', onLenisScroll)
+    }
   }, [reduced])
 
   /* ── Cerrar menú al redimensionar a desktop ── */
