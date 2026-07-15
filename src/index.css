@@ -280,39 +280,34 @@ html.reduced-motion .loader-exit {
 }
 
 /* ═══════════════════════════════════════════
-   CUSTOM CURSOR (desktop only)
+   CURSOR DECORATIVO (desktop only)
+   ═══════════════════════════════════════════
+   Puntito que sigue al ratón — NO reemplaza el cursor nativo.
+   mix-blend-mode: difference = se invierte con el fondo, visible siempre.
    ═══════════════════════════════════════════ */
-
-html.custom-cursor-active,
-html.custom-cursor-active * {
-  cursor: none !important;
-}
 
 #custom-cursor {
   position: fixed;
-  width: 8px;
-  height: 8px;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 6px;
   background: var(--color-primary);
   border-radius: 50%;
   pointer-events: none;
   z-index: 9999;
-  opacity: 0;
-  transition: width 0.25s var(--ease-out-expo),
-              height 0.25s var(--ease-out-expo),
-              background 0.25s var(--ease-out-expo),
-              border 0.25s var(--ease-out-expo),
-              opacity 0.3s ease;
-  transform: translate(-50%, -50%);
-}
-
-#custom-cursor.cursor-visible {
   opacity: 1;
+  transition: width 0.3s var(--ease-out-expo),
+              height 0.3s var(--ease-out-expo),
+              background 0.3s var(--ease-out-expo);
+  mix-blend-mode: difference;
+  will-change: transform;
 }
 
 #custom-cursor.cursor-hover {
-  width: 28px;
-  height: 28px;
-  background: rgba(14, 165, 233, 0.06);
+  width: 24px;
+  height: 24px;
+  background: rgba(14, 165, 233, 0.08);
   border: 1.5px solid var(--color-primary);
 }
 
