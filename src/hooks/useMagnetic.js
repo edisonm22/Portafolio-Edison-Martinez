@@ -27,6 +27,13 @@ export function useMagnetic(ref, {
     let targetY = 0
     let currentX = 0
     let currentY = 0
+    let isActive = false
+
+    /* ── Inicia el bucle si no está corriendo ── */
+    const startLoop = () => {
+      if (rafId) return
+      rafId = requestAnimationFrame(animate)
+    }
 
     const handleMove = (e) => {
       const rect = el.getBoundingClientRect()
@@ -42,6 +49,7 @@ export function useMagnetic(ref, {
         const angle = Math.atan2(dy, dx)
         targetX = Math.cos(angle) * strength * maxTranslate
         targetY = Math.sin(angle) * strength * maxTranslate
+        if (!isActive) { isActive = true; startLoop() }
       } else {
         targetX = 0
         targetY = 0
@@ -58,15 +66,19 @@ export function useMagnetic(ref, {
         rafId = requestAnimationFrame(animate)
       } else {
         rafId = null
+        isActive = false
       }
     }
+
+    const handleEnter = () => { isActive = true; startLoop() }
 
     const handleLeave = () => {
       targetX = 0
       targetY = 0
-      if (!rafId) rafId = requestAnimationFrame(animate)
+      startLoop()
     }
 
+    el.addEventListener('mouseenter', handleEnter, { passive: true })
     el.addEventListener('mousemove', handleMove, { passive: true })
     el.addEventListener('mouseleave', handleLeave, { passive: true })
 
@@ -74,14 +86,14 @@ export function useMagnetic(ref, {
     const handleResize = () => {
       targetX = 0; targetY = 0
       currentX = 0; currentY = 0
+      isActive = false
       el.style.transform = ''
       if (rafId) { cancelAnimationFrame(rafId); rafId = null }
     }
     window.addEventListener('resize', handleResize, { passive: true })
 
-    rafId = requestAnimationFrame(animate)
-
     return () => {
+      el.removeEventListener('mouseenter', handleEnter)
       el.removeEventListener('mousemove', handleMove)
       el.removeEventListener('mouseleave', handleLeave)
       window.removeEventListener('resize', handleResize)
