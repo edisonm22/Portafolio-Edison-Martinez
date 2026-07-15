@@ -3,7 +3,6 @@ import { useReducedMotion } from '../hooks/useReducedMotion.js'
 import { useMagnetic } from '../hooks/useMagnetic.js'
 import { useScrollReveal } from '../hooks/useScrollReveal.js'
 import Hero3D from './Hero3D.jsx'
-import HeroThreeScene from './HeroThreeScene.jsx'
 
 export default function Hero() {
   const revealRef = useScrollReveal()
@@ -99,11 +98,6 @@ export default function Hero() {
           'radial-gradient(ellipse 70% 40% at 0% 50%, rgba(14, 165, 233, 0.08) 0%, transparent 65%), radial-gradient(ellipse 40% 30% at 100% 80%, rgba(168, 85, 247, 0.06) 0%, transparent 55%), var(--color-surface-950)',
       }}
     >
-      {/* ── Three.js 3D Scene (desktop only) ── */}
-      <div className="hidden lg:block absolute inset-0">
-        <HeroThreeScene reduced={reduced} />
-      </div>
-
       {/* Blobs con parallax */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div

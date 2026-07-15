@@ -5,7 +5,9 @@ import { useEffect, useRef, useCallback } from 'react'
    ─ Canvas particle network (conexiones)
    ─ Formas geométricas CSS 3D flotantes
    ─ Mouse parallax multi-capa
-   ═══════════════════════════════════════════ */
+   ═══════════════════════════════════════════
+   Single lightweight effect for Hero.
+   Falls back silently if Canvas APIs fail. */
 
 const COLORS = {
   primary: '14, 165, 233',   // #0ea5e9
@@ -21,7 +23,7 @@ export default function Hero3D({ reduced = false }) {
   const rafRef = useRef(null)
 
   /* ────────────────────────────────────────────
-     CANVAS: Particle Network
+     CANVAS: Particle Network (con try/catch)
      ──────────────────────────────────────────── */
   useEffect(() => {
     if (reduced) return
@@ -29,144 +31,160 @@ export default function Hero3D({ reduced = false }) {
     const canvas = canvasRef.current
     if (!canvas) return
 
-    const ctx = canvas.getContext('2d')
-    let dpr = Math.min(window.devicePixelRatio, 2)
+    /* ── early exit si algo falla ── */
+    let mounted = true
+    let ctx = null
+    let dpr = 1
     let w = 0, h = 0
 
-    /* ── Init particles ── */
-    const P_COUNT = 90
-    const CONN_DIST = 160
-    const MOUSE_RADIUS = 200
+    try {
+      ctx = canvas.getContext('2d')
+      if (!ctx) return // navegador sin soporte canvas 2D
+    } catch {
+      return // fallo silencioso
+    }
+
+    const P_COUNT = 60
+    const CONN_DIST = 150
+    const MOUSE_RADIUS = 180
     const PARTICLE_SPEED = 0.3
 
     function initParticles(width, height) {
+      if (width <= 0 || height <= 0) return []
       return Array.from({ length: P_COUNT }, () => ({
         x: Math.random() * width,
         y: Math.random() * height,
-        z: Math.random() * 3 + 0.5,         // ← profundidad 3D simulada (0.5–3.5)
+        z: Math.random() * 3 + 0.5,
         vx: (Math.random() - 0.5) * PARTICLE_SPEED,
         vy: (Math.random() - 0.5) * PARTICLE_SPEED,
-        vz: (Math.random() - 0.5) * 0.06,    // ← velocidad en Z
+        vz: (Math.random() - 0.5) * 0.06,
         r: Math.random() * 1.6 + 0.6,
         color: Math.random() > 0.5 ? COLORS.primary : COLORS.accent,
         phase: Math.random() * Math.PI * 2,
       }))
     }
 
-    /* ── Resize ── */
+    /* ── Resize (seguro) ── */
     function resize() {
-      const parent = canvas.parentElement
-      const rect = parent.getBoundingClientRect()
-      w = rect.width
-      h = rect.height
-      dpr = Math.min(window.devicePixelRatio, 2)
-      canvas.width = w * dpr
-      canvas.height = h * dpr
-      canvas.style.width = w + 'px'
-      canvas.style.height = h + 'px'
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+      if (!mounted) return
+      try {
+        const parent = canvas.parentElement
+        if (!parent) return
 
-      if (!particlesRef.current.length) {
-        particlesRef.current = initParticles(w, h)
+        const rect = parent.getBoundingClientRect()
+        if (rect.width <= 0 || rect.height <= 0) return // invisible aún
+
+        w = rect.width
+        h = rect.height
+        dpr = Math.min(window.devicePixelRatio, 2)
+        canvas.width = w * dpr
+        canvas.height = h * dpr
+        canvas.style.width = w + 'px'
+        canvas.style.height = h + 'px'
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+
+        if (!particlesRef.current.length) {
+          particlesRef.current = initParticles(w, h)
+        }
+      } catch {
+        // ignorar errores en resize
       }
     }
     resize()
 
     const mouse = mouseRef.current
 
-    /* ── Draw frame ── */
+    /* ── Draw ── */
     function draw(time) {
-      ctx.clearRect(0, 0, w, h)
+      if (!mounted) return
+      try {
+        ctx.clearRect(0, 0, w, h)
 
-      // Smooth mouse interpolation
-      mouse.x += (mouse.targetX - mouse.x) * 0.08
-      mouse.y += (mouse.targetY - mouse.y) * 0.08
+        mouse.x += (mouse.targetX - mouse.x) * 0.08
+        mouse.y += (mouse.targetY - mouse.y) * 0.08
 
-      const particles = particlesRef.current
-
-      // Update positions (con profundidad Z 3D)
-      for (let i = 0; i < particles.length; i++) {
-        const p = particles[i]
-        p.x += p.vx + Math.sin(time * 0.0005 + p.phase) * 0.12
-        p.y += p.vy + Math.cos(time * 0.0006 + p.phase) * 0.12
-        p.z += p.vz + Math.sin(time * 0.0003 + p.phase * 1.5) * 0.04
-
-        // Clamp Z
-        if (p.z < 0.3) p.z = 0.3
-        if (p.z > 4) p.z = 4
-
-        // Wrap XY
-        if (p.x < -20) p.x = w + 20
-        if (p.x > w + 20) p.x = -20
-        if (p.y < -20) p.y = h + 20
-        if (p.y > h + 20) p.y = -20
-
-        // Mouse repulsion (3D: también afecta Z)
-        const dx = p.x - mouse.x
-        const dy = p.y - mouse.y
-        const dist = Math.sqrt(dx * dx + dy * dy)
-        if (dist < MOUSE_RADIUS && dist > 0) {
-          const force = (MOUSE_RADIUS - dist) / MOUSE_RADIUS * 0.4
-          p.x += (dx / dist) * force
-          p.y += (dy / dist) * force
-          // Mouse empuja también en Z (efecto 3D)
-          p.z += (3 - p.z) * force * 0.02
+        const particles = particlesRef.current
+        if (!particles.length) {
+          rafRef.current = requestAnimationFrame(draw)
+          return
         }
-      }
 
-      // Draw connections + particles (con profundidad Z)
-      // Ordenar por Z para dibujar atrás primero
-      const sorted = [...particles].sort((a, b) => a.z - b.z)
+        for (let i = 0; i < particles.length; i++) {
+          const p = particles[i]
+          p.x += p.vx + Math.sin(time * 0.0005 + p.phase) * 0.12
+          p.y += p.vy + Math.cos(time * 0.0006 + p.phase) * 0.12
+          p.z += p.vz + Math.sin(time * 0.0003 + p.phase * 1.5) * 0.04
 
-      for (let i = 0; i < sorted.length; i++) {
-        const a = sorted[i]
+          if (p.z < 0.3) p.z = 0.3
+          if (p.z > 4) p.z = 4
+          if (p.x < -20) p.x = w + 20
+          if (p.x > w + 20) p.x = -20
+          if (p.y < -20) p.y = h + 20
+          if (p.y > h + 20) p.y = -20
 
-        // Factor de profundidad: cerca = grande + brillante
-        const depthFactor = (a.z - 0.3) / 3.7  // 0..1 (cerca→lejos)
-        const sizeMul = 1 + (1 - depthFactor) * 0.8
-        const alphaMul = 0.3 + (1 - depthFactor) * 0.5
-        const glowMul = (1 - depthFactor) * 0.6
-
-        // Connections
-        for (let j = i + 1; j < sorted.length; j++) {
-          const b = sorted[j]
-          const dx = a.x - b.x
-          const dy = a.y - b.y
-          const dist = dx * dx + dy * dy
-
-          if (dist < CONN_DIST * CONN_DIST) {
-            const alpha = (1 - Math.sqrt(dist) / CONN_DIST) * 0.25 * (1 - depthFactor * 0.5)
-            ctx.beginPath()
-            ctx.moveTo(a.x, a.y)
-            ctx.lineTo(b.x, b.y)
-            ctx.strokeStyle = `rgba(${COLORS.primary}, ${alpha})`
-            ctx.lineWidth = 0.4 + (1 - depthFactor) * 0.5
-            ctx.stroke()
+          const dx = p.x - mouse.x
+          const dy = p.y - mouse.y
+          const dist = Math.sqrt(dx * dx + dy * dy)
+          if (dist < MOUSE_RADIUS && dist > 0) {
+            const force = (MOUSE_RADIUS - dist) / MOUSE_RADIUS * 0.4
+            p.x += (dx / dist) * force
+            p.y += (dy / dist) * force
+            p.z += (3 - p.z) * force * 0.02
           }
         }
 
-        // Draw particle (tamaño afectado por profundidad)
-        const drawR = a.r * sizeMul
-        ctx.beginPath()
-        ctx.arc(a.x, a.y, drawR, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(${a.color}, ${0.3 + alphaMul * 0.4})`
-        ctx.fill()
+        const sorted = [...particles].sort((a, b) => a.z - b.z)
 
-        // Glow (más grande y brillante si está cerca)
-        ctx.beginPath()
-        ctx.arc(a.x, a.y, drawR * (2 + glowMul * 3), 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(${a.color}, ${0.04 + glowMul * 0.1})`
-        ctx.fill()
+        for (let i = 0; i < sorted.length; i++) {
+          const a = sorted[i]
+          const depthFactor = (a.z - 0.3) / 3.7
+          const sizeMul = 1 + (1 - depthFactor) * 0.8
+          const glowMul = (1 - depthFactor) * 0.6
+
+          for (let j = i + 1; j < sorted.length; j++) {
+            const b = sorted[j]
+            const dx = a.x - b.x
+            const dy = a.y - b.y
+            const dist = dx * dx + dy * dy
+
+            if (dist < CONN_DIST * CONN_DIST) {
+              const alpha = (1 - Math.sqrt(dist) / CONN_DIST) * 0.25 * (1 - depthFactor * 0.5)
+              ctx.beginPath()
+              ctx.moveTo(a.x, a.y)
+              ctx.lineTo(b.x, b.y)
+              ctx.strokeStyle = `rgba(${COLORS.primary}, ${alpha})`
+              ctx.lineWidth = 0.4 + (1 - depthFactor) * 0.5
+              ctx.stroke()
+            }
+          }
+
+          const drawR = a.r * sizeMul
+          ctx.beginPath()
+          ctx.arc(a.x, a.y, drawR, 0, Math.PI * 2)
+          ctx.fillStyle = `rgba(${a.color}, ${0.5})`
+          ctx.fill()
+
+          ctx.beginPath()
+          ctx.arc(a.x, a.y, drawR * (2 + glowMul * 3), 0, Math.PI * 2)
+          ctx.fillStyle = `rgba(${a.color}, ${0.04 + glowMul * 0.1})`
+          ctx.fill()
+        }
+
+        rafRef.current = requestAnimationFrame(draw)
+      } catch {
+        // fallo silencioso en frame, no detener RAF
+        rafRef.current = requestAnimationFrame(draw)
       }
-
-      rafRef.current = requestAnimationFrame(draw)
     }
 
-    /* ── Mouse tracking ── */
+    /* ── Mouse ── */
     const onMouse = (e) => {
-      const rect = canvas.getBoundingClientRect()
-      mouseRef.current.targetX = e.clientX - rect.left
-      mouseRef.current.targetY = e.clientY - rect.top
+      if (!mounted) return
+      try {
+        const rect = canvas.getBoundingClientRect()
+        mouseRef.current.targetX = e.clientX - rect.left
+        mouseRef.current.targetY = e.clientY - rect.top
+      } catch { /* ignore */ }
     }
 
     const onLeave = () => {
@@ -181,6 +199,7 @@ export default function Hero3D({ reduced = false }) {
     rafRef.current = requestAnimationFrame(draw)
 
     return () => {
+      mounted = false
       window.removeEventListener('resize', resize)
       canvas.removeEventListener('mousemove', onMouse)
       canvas.removeEventListener('mouseleave', onLeave)
@@ -189,7 +208,7 @@ export default function Hero3D({ reduced = false }) {
   }, [reduced])
 
   /* ────────────────────────────────────────────
-     MOUSE PARALLAX (3D depth layers)
+     MOUSE PARALLAX (CSS 3D shapes layers)
      ──────────────────────────────────────────── */
   const updateParallax = useCallback(() => {
     const scene = sceneRef.current
@@ -200,11 +219,12 @@ export default function Hero3D({ reduced = false }) {
 
     const cx = window.innerWidth / 2
     const cy = window.innerHeight / 2
+    let raf
 
     const tick = () => {
       const mx = mouseRef.current.targetX
       const my = mouseRef.current.targetY
-      const nx = (mx - cx) / cx   // -1..1
+      const nx = (mx - cx) / cx
       const ny = (my - cy) / cy
 
       layers.forEach((layer) => {
@@ -215,10 +235,10 @@ export default function Hero3D({ reduced = false }) {
         layer.style.transform = `translate3d(${x}px, ${y}px, 0) ${z}`
       })
 
-      requestAnimationFrame(tick)
+      raf = requestAnimationFrame(tick)
     }
 
-    const raf = requestAnimationFrame(tick)
+    raf = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(raf)
   }, [reduced])
 
@@ -229,7 +249,7 @@ export default function Hero3D({ reduced = false }) {
 
   return (
     <div ref={sceneRef} className="absolute inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 1 }}>
-      {/* ── Canvas particle network ── */}
+      {/* Canvas particle network */}
       <canvas
         ref={canvasRef}
         className="absolute inset-0"
@@ -237,9 +257,8 @@ export default function Hero3D({ reduced = false }) {
         aria-hidden="true"
       />
 
-      {/* ── Geometric CSS 3D Shapes ── */}
+      {/* Geometric CSS 3D Shapes */}
       <div className="absolute inset-0" style={{ perspective: '1000px', zIndex: 1 }}>
-
         {/* Large rotating hexagon */}
         <div
           className="parallax-layer-3d geo-hex absolute top-[12%] right-[6%] w-64 h-64 opacity-[0.07]"
@@ -274,7 +293,7 @@ export default function Hero3D({ reduced = false }) {
           />
         </div>
 
-        {/* Small orbiting triangle near center */}
+        {/* Small orbiting triangle */}
         <div
           className="parallax-layer-3d absolute top-[45%] left-[55%] w-20 h-20 opacity-[0.06]"
           data-speed="0.7"
@@ -306,12 +325,12 @@ export default function Hero3D({ reduced = false }) {
           />
         </div>
 
-        {/* Vertical line grid (subtle) — solo decoración */}
+        {/* Vertical line grid */}
         <div
           className="parallax-layer-3d absolute inset-0 opacity-[0.015]"
           data-speed="0.1"
           style={{
-            backgroundImage: `repeating-linear-gradient(90deg, rgba(14,165,233,0.5) 0px, transparent 1px, transparent 80px)`,
+            backgroundImage: 'repeating-linear-gradient(90deg, rgba(14,165,233,0.5) 0px, transparent 1px, transparent 80px)',
             backgroundSize: '80px 100%',
           }}
         />
