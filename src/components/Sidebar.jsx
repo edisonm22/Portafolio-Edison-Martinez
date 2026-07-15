@@ -86,7 +86,7 @@ export default function Sidebar() {
         <div className="absolute top-0 left-8 right-8 h-px bg-gradient-to-r from-primary/60 via-accent/40 to-transparent" />
 
         {/* Top: Brand + Nav */}
-        <div className="flex flex-col gap-10">
+        <div className="flex flex-col gap-6">
           {/* Brand */}
           <a
             href="#home"
@@ -104,7 +104,7 @@ export default function Sidebar() {
 
           {/* Navigation */}
           <nav aria-label="Navegación principal">
-            <ul className="space-y-1">
+            <ul className="space-y-0.5">
               {navItems.map((item) => {
                 const isActive = activeSection === item.id
                 return (
@@ -112,7 +112,7 @@ export default function Sidebar() {
                     <a
                       href={`#${item.id}`}
                       onClick={(e) => { e.preventDefault(); handleNav(item.id) }}
-                      className={`group flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-300 ${
+                      className={`group flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-300 ${
                         isActive
                           ? 'bg-primary/8 text-light font-semibold'
                           : 'text-surface-500 hover:text-surface-300 hover:bg-surface-900/50'
@@ -139,7 +139,7 @@ export default function Sidebar() {
         </div>
 
         {/* Bottom: Section number + Social + Footer */}
-        <div className="space-y-5">
+        <div className="space-y-4">
           {/* Section number (animated) */}
           <div className="overflow-hidden">
             <span
@@ -237,7 +237,7 @@ export default function Sidebar() {
         >
           <div className="flex flex-col h-full pt-24 px-8 pb-8">
             <nav className="flex-1">
-              <ul className="space-y-2">
+              <ul className="space-y-1">
                 {navItems.map((item, i) => {
                   const isActive = activeSection === item.id
                   return (
@@ -245,7 +245,7 @@ export default function Sidebar() {
                       <a
                         href={`#${item.id}`}
                         onClick={(e) => { e.preventDefault(); handleNav(item.id) }}
-                        className={`flex items-center gap-4 px-4 py-3.5 rounded-xl text-base transition-all duration-300 ${
+                        className={`flex items-center gap-4 px-4 py-3 rounded-xl text-base transition-all duration-300 ${
                           isActive
                             ? 'bg-primary/8 text-primary border border-primary/20 font-semibold'
                             : 'text-surface-400 hover:bg-surface-800 hover:text-surface-300'
