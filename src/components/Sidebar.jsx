@@ -82,6 +82,25 @@ export default function Sidebar() {
     return () => mq.removeEventListener('change', handler)
   }, [])
 
+  /* ── Escape key + focus trap for mobile menu ── */
+  useEffect(() => {
+    if (!mobileOpen) return
+
+    const handleKey = (e) => {
+      if (e.key === 'Escape') setMobileOpen(false)
+    }
+    document.addEventListener('keydown', handleKey)
+
+    // Focus trap: mantener foco dentro del menú
+    const menu = document.getElementById('mobile-menu')
+    if (menu) {
+      const focusable = menu.querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])')
+      if (focusable.length > 0) focusable[0].focus()
+    }
+
+    return () => document.removeEventListener('keydown', handleKey)
+  }, [mobileOpen])
+
   const handleNav = (id) => {
     scrollToSection(id)
     setMobileOpen(false)
