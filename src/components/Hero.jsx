@@ -27,11 +27,28 @@ export default function Hero() {
     return () => clearTimeout(t)
   }, [reduced])
 
-  /* ── Mostrar scroll indicator tras typing ── */
+  /* ── Mostrar scroll indicator tras typing, ocultar al scrollear ── */
   useEffect(() => {
     if (reduced) { setShowScrollIndicator(true); return }
-    const t = setTimeout(() => setShowScrollIndicator(true), 2000)
-    return () => clearTimeout(t)
+
+    let timer = setTimeout(() => setShowScrollIndicator(true), 2000)
+    let scrollFired = false
+
+    const onScroll = () => {
+      if (!scrollFired) {
+        scrollFired = true
+        setShowScrollIndicator(false)
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('lenis-scroll', onScroll)
+
+    return () => {
+      clearTimeout(timer)
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('lenis-scroll', onScroll)
+    }
   }, [reduced])
 
   /* ── Animated counters al entrar en viewport ── */
@@ -269,14 +286,15 @@ export default function Hero() {
 
       {/* ── Scroll-down indicator (desktop only) ── */}
       <div
-        className={`absolute bottom-8 left-1/2 -translate-x-1/2 hidden lg:flex flex-col items-center gap-2 transition-all duration-1000 ${
-          showScrollIndicator ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+        className={`absolute bottom-8 left-1/2 -translate-x-1/2 hidden lg:flex flex-col items-center gap-2 px-3 py-2 rounded-xl bg-surface-950/30 backdrop-blur-sm border border-white/5 transition-all duration-1000 ${
+          showScrollIndicator ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
         }`}
+        aria-hidden="true"
       >
-        <span className="text-[10px] font-mono text-surface-600 tracking-[0.2em] uppercase">
+        <span className="text-[10px] font-mono text-surface-500 tracking-[0.2em] uppercase">
           Scroll
         </span>
-        <div className="w-5 h-8 border-2 border-surface-700 rounded-full flex justify-center">
+        <div className="w-5 h-8 border-2 border-surface-600/60 rounded-full flex justify-center">
           <div className="w-1 h-2.5 bg-primary rounded-full mt-2 animate-scroll-dot" />
         </div>
       </div>
