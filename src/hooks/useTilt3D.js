@@ -3,6 +3,7 @@ import { useReducedMotion } from './useReducedMotion.js'
 
 /**
  * useTilt3D — Aplica una rotación 3D perspective a un elemento siguiendo el ratón.
+ * Incluye glare dinámico (reflejo que sigue el ángulo del ratón).
  *
  * @param {Object} options
  * @param {number} options.maxTilt   — Grados máximos de inclinación (defecto 8)
@@ -10,6 +11,7 @@ import { useReducedMotion } from './useReducedMotion.js'
  * @param {number} options.scale    — Escala al hacer hover (defecto 1.02)
  * @param {number} options.speed    — Duración de la transición al reset (ms)
  * @param {boolean} options.gyro    — Usa deviceorientation como fallback táctil
+ * @param {boolean} options.glare   — Activar efecto de brillo angular (defecto true)
  * @returns {React.RefObject} ref   — Ref a pegar en el elemento
  */
 export function useTilt3D({
@@ -18,12 +20,13 @@ export function useTilt3D({
   scale = 1.02,
   speed = 400,
   gyro = false,
+  glare = true,
 } = {}) {
   const ref = useRef(null)
   const state = useRef({ rect: null, isHovering: false, rafId: null })
   const reduced = useReducedMotion()
 
-  /* ── Calcula la rotación desde coordenadas ── */
+  /* ── Calcula rotación + glare desde coordenadas ── */
   const applyTilt = useCallback((x, y) => {
     const el = ref.current
     if (!el) return
@@ -37,8 +40,16 @@ export function useTilt3D({
     const deltaX = (x - centerX) / (rect.width / 2)   // -1..1
     const deltaY = (y - centerY) / (rect.height / 2)  // -1..1
 
-    const tiltY = deltaX * maxTilt  // rotar sobre Y sigue el eje X
+    const tiltY = deltaX * maxTilt
     const tiltX = -deltaY * maxTilt
+
+    // Glare: ángulo desde el centro + intensidad basada en distancia
+    if (glare) {
+      const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI) + 90
+      const intensity = Math.min(1, Math.sqrt(deltaX * deltaX + deltaY * deltaY) * 1.2)
+      el.style.setProperty('--glare-angle', `${angle}deg`)
+      el.style.setProperty('--glare-intensity', intensity.toString())
+    }
 
     const transform = `
       perspective(${perspective}px)
@@ -48,7 +59,7 @@ export function useTilt3D({
     `
 
     el.style.transform = transform
-  }, [maxTilt, perspective, scale])
+  }, [maxTilt, perspective, scale, glare])
 
   /* ── Resetea la posición ── */
   const resetTilt = useCallback(() => {

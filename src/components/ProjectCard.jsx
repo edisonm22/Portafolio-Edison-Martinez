@@ -63,6 +63,14 @@ const ProjectCard = forwardRef(function ProjectCard({ project, index = 0 }, ref)
         className="card-spotlight relative z-10 bg-surface-900 rounded-[1.25rem] rounded-tr-[0.5rem] rounded-bl-[0.5rem] overflow-hidden transition-all duration-500 group-hover:-translate-y-1"
         style={{ transformStyle: 'preserve-3d' }}
       >
+        {/* Glare shine overlay — sigue el ángulo del ratón (useTilt3D) */}
+        <div
+          className="absolute inset-0 z-20 pointer-events-none rounded-[inherit] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          style={{
+            background:
+              'linear-gradient(var(--glare-angle, 0deg), rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 40%, transparent 60%)',
+          }}
+        />
         {/* Image area */}
         <div className="relative aspect-[16/10] overflow-hidden" style={{ background: mesh }}>
           <div className="absolute inset-0 bg-gradient-to-t from-surface-950/95 via-surface-950/40 to-transparent md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-500" />

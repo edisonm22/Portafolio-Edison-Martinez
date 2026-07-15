@@ -112,13 +112,15 @@
 
   /* ── Animations ── */
   --animate-border-shimmer: border-shimmer 3s linear infinite;
-  --animate-rotate-3d-ring: rotate-3d-ring 14s linear infinite;
-  --animate-rotate-3d-ring-inner: rotate-3d-ring-inner 18s linear infinite;
-  --animate-orbit-3d: orbit-3d 10s linear infinite;
-  --animate-orbit-3d-reverse: orbit-3d-reverse 14s linear infinite;
   --animate-float-3d-slow: float-3d-slow 6s ease-in-out infinite;
   --animate-float-3d-slower: float-3d-slower 8s ease-in-out infinite;
   --animate-pulse-glow-3d: pulse-glow-3d 4s ease-in-out infinite;
+
+  /* 3D Geometry */
+  --animate-hex-3d: hex-3d 20s linear infinite;
+  --animate-diamond-3d: diamond-3d 25s linear infinite;
+  --animate-triangle-3d: triangle-3d 15s linear infinite;
+  --animate-ring-glow-3d: ring-glow-3d 8s ease-in-out infinite;
 }
 
 /* ═══════════════════════════════════════════
@@ -204,28 +206,35 @@
   100% { background-position: 0% 50%; }
 }
 
-/* ── 3D Floating Ring ── */
-@keyframes rotate-3d-ring {
-  0%   { transform: rotateX(72deg) rotateY(0deg);   }
-  100% { transform: rotateX(72deg) rotateY(360deg); }
+/* ── 3D Geometry: Hexagon rotation in 3D ── */
+@keyframes hex-3d {
+  0%   { transform: rotateX(65deg) rotateY(0deg)   rotateZ(0deg);   }
+  50%  { transform: rotateX(65deg) rotateY(180deg) rotateZ(3deg);   }
+  100% { transform: rotateX(65deg) rotateY(360deg) rotateZ(0deg);   }
 }
 
-@keyframes rotate-3d-ring-inner {
-  0%   { transform: rotateX(72deg) rotateY(360deg); }
-  100% { transform: rotateX(72deg) rotateY(0deg);   }
+/* ── 3D Geometry: Diamond ── */
+@keyframes diamond-3d {
+  0%   { transform: rotateX(50deg) rotateY(0deg)   rotateZ(0deg);   }
+  33%  { transform: rotateX(50deg) rotateY(120deg) rotateZ(-2deg);  }
+  66%  { transform: rotateX(50deg) rotateY(240deg) rotateZ(2deg);   }
+  100% { transform: rotateX(50deg) rotateY(360deg) rotateZ(0deg);   }
 }
 
-/* ── 3D Orbital motion ── */
-@keyframes orbit-3d {
-  0%   { transform: rotate(0deg)   translateX(130px) rotate(0deg);   }
-  100% { transform: rotate(360deg) translateX(130px) rotate(-360deg); }
-}
-@keyframes orbit-3d-reverse {
-  0%   { transform: rotate(0deg)   translateX(90px) rotate(0deg);   }
-  100% { transform: rotate(-360deg) translateX(90px) rotate(360deg); }
+/* ── 3D Geometry: Triangle ── */
+@keyframes triangle-3d {
+  0%   { transform: rotateX(60deg) rotateY(0deg)   scale(1);   }
+  50%  { transform: rotateX(60deg) rotateY(180deg) scale(1.1); }
+  100% { transform: rotateX(60deg) rotateY(360deg) scale(1);   }
 }
 
-/* ── Floating 3D float / bob ── */
+/* ── 3D Ring pulse glow ── */
+@keyframes ring-glow-3d {
+  0%, 100% { opacity: 0.3; transform: scale(1);                    }
+  50%      { opacity: 0.6; transform: scale(1.08);                 }
+}
+
+/* ── Floating 3D bob ── */
 @keyframes float-3d-slow {
   0%, 100% { transform: translate3d(0, 0, 0);         }
   50%      { transform: translate3d(0, -16px, 20px);  }
@@ -414,25 +423,24 @@ html.reduced-motion .section-num-animate {
 }
 
 /* ── reduced-motion: detiene todas las animaciones 3D ── */
-html.reduced-motion .animate-rotate-3d-ring,
-html.reduced-motion .animate-rotate-3d-ring-inner,
-html.reduced-motion .animate-orbit-3d,
-html.reduced-motion .animate-orbit-3d-reverse,
 html.reduced-motion .animate-float-3d-slow,
 html.reduced-motion .animate-float-3d-slower,
-html.reduced-motion .animate-pulse-glow-3d {
+html.reduced-motion .animate-pulse-glow-3d,
+html.reduced-motion .animate-hex-3d,
+html.reduced-motion .animate-diamond-3d,
+html.reduced-motion .animate-triangle-3d,
+html.reduced-motion .animate-ring-glow-3d {
   animation: none !important;
 }
 
-/* ── visible en pantalla ── */
 @media (prefers-reduced-motion: reduce) {
-  .animate-rotate-3d-ring,
-  .animate-rotate-3d-ring-inner,
-  .animate-orbit-3d,
-  .animate-orbit-3d-reverse,
   .animate-float-3d-slow,
   .animate-float-3d-slower,
-  .animate-pulse-glow-3d {
+  .animate-pulse-glow-3d,
+  .animate-hex-3d,
+  .animate-diamond-3d,
+  .animate-triangle-3d,
+  .animate-ring-glow-3d {
     animation: none !important;
   }
 }
