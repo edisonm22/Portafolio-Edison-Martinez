@@ -82,14 +82,17 @@ export function useTilt3D({
     const el = ref.current
     if (!el || reduced) return
 
-    const onEnter = () => {
+    const refreshRect = () => {
       state.current.rect = el.getBoundingClientRect()
+    }
+
+    const onEnter = () => {
+      refreshRect()
       state.current.isHovering = true
     }
 
     const onMove = (e) => {
       if (!state.current.isHovering) return
-      state.current.rect = el.getBoundingClientRect()
       applyTilt(e.clientX, e.clientY)
     }
 
@@ -97,6 +100,9 @@ export function useTilt3D({
       state.current.isHovering = false
       resetTilt()
     }
+
+    // Re-calcular rect si hay scroll mientras se hace hover
+    window.addEventListener('scroll', refreshRect, { passive: true })
 
     el.addEventListener('mouseenter', onEnter)
     el.addEventListener('mousemove', onMove, { passive: true })
@@ -106,6 +112,7 @@ export function useTilt3D({
       el.removeEventListener('mouseenter', onEnter)
       el.removeEventListener('mousemove', onMove)
       el.removeEventListener('mouseleave', onLeave)
+      window.removeEventListener('scroll', refreshRect)
     }
   }, [reduced, applyTilt, resetTilt])
 
