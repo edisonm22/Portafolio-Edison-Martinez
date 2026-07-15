@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useReducedMotion } from '../hooks/useReducedMotion.js'
 import { useMagnetic } from '../hooks/useMagnetic.js'
 import { useScrollReveal } from '../hooks/useScrollReveal.js'
@@ -9,11 +9,9 @@ export default function Hero() {
   const reduced = useReducedMotion()
   const ctaRef = useRef(null)
   const projectsRef = useRef(null)
-  const depthLayersRef = useRef([])
   const [countersVisible, setCountersVisible] = useState(false)
   const countersRef = useRef(null)
   const [wordRevealDone, setWordRevealDone] = useState(false)
-  const [typingDone, setTypingDone] = useState(false)
   const [showScrollIndicator, setShowScrollIndicator] = useState(false)
 
   useMagnetic(ctaRef, { maxTranslate: 6, lerp: 0.15 })
@@ -94,7 +92,6 @@ export default function Hero() {
     if (!hero) return
 
     const layers = hero.querySelectorAll('[data-depth]')
-    depthLayersRef.current = layers
 
     let rafId = null
     let mouseX = 0, mouseY = 0, currentX = 0, currentY = 0
@@ -196,7 +193,7 @@ export default function Hero() {
           </span>
         </h1>
 
-        <TypedSubtitle reduced={reduced} onDone={() => setTypingDone(true)} />
+        <TypedSubtitle reduced={reduced} onDone={() => {}} />
 
         <p
           className="text-surface-400 text-base sm:text-lg leading-relaxed mb-10 reveal"
