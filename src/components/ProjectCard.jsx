@@ -173,12 +173,13 @@ const ProjectCard = forwardRef(function ProjectCard({ project, index = 0 }, ref)
             )}
           </div>
 
-          {/* Tags técnicos en monospace */}
+          {/* Tags técnicos en monospace con hover animado */}
           <div className="flex flex-wrap gap-1.5 mb-4">
             {techs.map((tech, i) => (
               <span
                 key={i}
-                className={`px-2.5 py-1 text-[11px] font-mono font-medium rounded-full ${getTechColor(tech)}`}
+                className={`tech-tag px-2.5 py-1 text-[11px] font-mono font-medium rounded-full ${getTechColor(tech)}`}
+                style={{ transitionDelay: `${i * 30}ms` }}
               >
                 {tech}
               </span>

@@ -61,12 +61,13 @@ export default function Services() {
                 {service.description}
               </p>
 
-              {/* Tech tags — monospace */}
+              {/* Tech tags — monospace con hover animado */}
               <div className="relative flex flex-wrap gap-1.5">
-                {(service.techs || defaultTechs(index)).map((tech) => (
+                {(service.techs || defaultTechs(index)).map((tech, i) => (
                   <span
                     key={tech}
-                    className="px-2 py-0.5 text-[11px] font-mono font-medium text-surface-600 bg-surface-950 rounded-full border border-surface-800"
+                    className="tech-tag px-2 py-0.5 text-[11px] font-mono font-medium text-surface-600 bg-surface-950 rounded-full border border-surface-800"
+                    style={{ transitionDelay: `${i * 30}ms` }}
                   >
                     {tech}
                   </span>

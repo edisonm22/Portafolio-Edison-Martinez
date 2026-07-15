@@ -166,17 +166,26 @@ export default function Contact() {
           </button>
           </div>
 
-          {/* Status message */}
+          {/* Status message with animation */}
           {status.msg && (
             <div
-              className={`px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+              className={`px-4 py-3 rounded-xl text-sm font-medium transition-all duration-500 ${
                 status.type === 'success'
-                  ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/20'
+                  ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/20 form-success'
                   : 'bg-red-500/15 text-red-400 border border-red-500/20'
               }`}
               role="alert"
             >
-              {status.msg}
+              {status.type === 'success' ? (
+                <span className="flex items-center gap-2">
+                  <svg className="w-5 h-5 shrink-0 animate-success-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
+                    <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  {status.msg}
+                </span>
+              ) : (
+                status.msg
+              )}
             </div>
           )}
         </form>

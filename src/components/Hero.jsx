@@ -152,6 +152,13 @@ export default function Hero() {
           style={{ willChange: 'transform' }}
         />
 
+        {/* Floating CSS particles */}
+        <div className="hero-particle hero-particle-1" />
+        <div className="hero-particle hero-particle-2" />
+        <div className="hero-particle hero-particle-3" />
+        <div className="hero-particle hero-particle-4" />
+        <div className="hero-particle hero-particle-5" />
+
         {/* ── Hero Three.js Scene (desktop only) ── */}
         <div className="hidden lg:block absolute inset-0">
           <HeroThreeScene reduced={reduced} />
