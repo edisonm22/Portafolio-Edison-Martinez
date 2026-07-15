@@ -1,6 +1,7 @@
 import { forwardRef, useRef, useEffect } from 'react'
 import { getTechColor } from '../utils/techColors.js'
 import { useTilt3D } from '../hooks/useTilt3D.js'
+import { useReducedMotion } from '../hooks/useReducedMotion.js'
 
 const gradientMeshes = [
   'linear-gradient(135deg, rgba(14,165,233,0.12), rgba(168,85,247,0.08), rgba(14,165,233,0.04))',
@@ -17,6 +18,8 @@ const ProjectCard = forwardRef(function ProjectCard({ project, index = 0 }, ref)
   const mesh = gradientMeshes[index % gradientMeshes.length]
   const imageRef = useRef(null)
   const imageParallax = useRef({ x: 0, y: 0, targetX: 0, targetY: 0 })
+  const reduced = useReducedMotion()
+  const blurRevealed = useRef(false)
 
   /* ── Merge forwarded ref with tilt ref for scroll reveal ── */
   useEffect(() => {
@@ -85,6 +88,39 @@ const ProjectCard = forwardRef(function ProjectCard({ project, index = 0 }, ref)
     card.addEventListener('mousemove', handleMouse)
     return () => card.removeEventListener('mousemove', handleMouse)
   }, [])
+
+  /* ── Blur-to-sharp reveal on scroll into view ── */
+  useEffect(() => {
+    const imgContainer = imageRef.current
+    if (!imgContainer) return
+
+    // Reduced motion: never blur
+    if (reduced) {
+      imgContainer.style.filter = ''
+      return
+    }
+    if (blurRevealed.current) return
+
+    // Start blurred
+    imgContainer.style.filter = 'blur(12px)'
+    imgContainer.style.transition = 'filter 0.8s cubic-bezier(0.16, 1, 0.3, 1)'
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          blurRevealed.current = true
+          requestAnimationFrame(() => {
+            imgContainer.style.filter = 'blur(0px)'
+          })
+          observer.disconnect()
+        }
+      },
+      { rootMargin: '0px 0px -50px 0px', threshold: 0 }
+    )
+
+    observer.observe(imgContainer)
+    return () => observer.disconnect()
+  }, [reduced])
 
   return (
     <article
