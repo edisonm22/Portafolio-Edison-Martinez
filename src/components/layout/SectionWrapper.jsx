@@ -7,7 +7,15 @@ export function SectionWrapper({
   children,
   className = '',
 }) {
-  const shapeIndex = (id?.length || 0) % 3
+  const SHAPE_BY_SECTION = {
+    home: 0,
+    skills: 1,
+    experience: 2,
+    projects: 0,
+    services: 1,
+    contact: 2,
+  }
+  const shapeIndex = SHAPE_BY_SECTION[id] ?? 0
 
   return (
     <section
