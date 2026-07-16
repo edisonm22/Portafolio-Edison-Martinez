@@ -3,6 +3,7 @@ import { useReducedMotion } from '../hooks/useReducedMotion.js'
 import { useMagnetic } from '../hooks/useMagnetic.js'
 import { useScrollReveal } from '../hooks/useScrollReveal.js'
 import HeroThreeScene from './HeroThreeScene.jsx'
+import InteractiveTerminal from './InteractiveTerminal.jsx'
 
 export default function Hero() {
   const revealRef = useScrollReveal()
@@ -222,6 +223,11 @@ export default function Hero() {
           experiencia de desarrollo. 5+ a&ntilde;os transformando ideas en soluciones
           robustas con React, Node.js y arquitectura cloud.
         </p>
+
+        {/* ── Terminal interactiva ── */}
+        <div className="mb-10 max-w-lg reveal" data-reveal-delay="300">
+          <InteractiveTerminal reduced={reduced} />
+        </div>
 
         {/* CTAs magnéticos */}
         <div
