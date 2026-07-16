@@ -220,7 +220,7 @@ export default function Sidebar() {
             </div>
           </div>
 
-          <p className="font-mono text-[10px] text-surface-500 tracking-[0.1em] uppercase">
+          <p className="font-mono text-[10px] text-surface-400 tracking-[0.1em] uppercase">
             &copy; {new Date().getFullYear()} Edison Martinez
           </p>
         </div>

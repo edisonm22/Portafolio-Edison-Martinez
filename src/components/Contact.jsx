@@ -203,7 +203,7 @@ export default function Contact() {
             )}
           </div>
 
-          <p className="text-caption text-surface-500 -mt-2">
+          <p className="text-caption text-surface-400 -mt-2">
             * Campos obligatorios
           </p>
 
