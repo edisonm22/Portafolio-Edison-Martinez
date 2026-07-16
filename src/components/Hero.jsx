@@ -288,37 +288,74 @@ export default function Hero() {
   )
 }
 
-/* ── Typing effect for subtitle ── */
+/* ── Typing effect for subtitle (ciclado entre frases) ── */
+const PHRASES = [
+  '< Full-Stack Developer />',
+  '< Especialista MERN Stack />',
+  '< Desarrollador Freelance />',
+]
+
 function TypedSubtitle({ reduced, onDone }) {
-  const fullText = '< Full-Stack Developer />'
-  const [displayed, setDisplayed] = useState(reduced ? fullText : '')
+  const [displayed, setDisplayed] = useState(reduced ? PHRASES[0] : '')
   const [cursorVisible, setCursorVisible] = useState(true)
 
   useEffect(() => {
     if (reduced) {
-      setDisplayed(fullText)
+      setDisplayed(PHRASES[0])
       onDone?.()
       return
     }
 
-    let idx = 0
-    const interval = setInterval(() => {
-      idx++
-      setDisplayed(fullText.slice(0, idx))
-      if (idx >= fullText.length) {
-        clearInterval(interval)
-        onDone?.()
-      }
-    }, 40)
+    let cancelled = false
+    let typeTimeout = null
+    let deleteTimeout = null
 
-    // Blinking cursor
+    // Blinking cursor (independiente)
     const cursorInterval = setInterval(() => {
       setCursorVisible((v) => !v)
     }, 530)
 
+    async function cycle() {
+      let phraseIdx = 0
+
+      while (!cancelled) {
+        const phrase = PHRASES[phraseIdx]
+
+        // ── Type ──
+        for (let i = 1; i <= phrase.length && !cancelled; i++) {
+          setDisplayed(phrase.slice(0, i))
+          await new Promise((r) => { typeTimeout = setTimeout(r, 20 + Math.random() * 30) })
+        }
+
+        if (cancelled) return
+
+        // Notificar que la primera frase terminó (scroll indicator)
+        if (phraseIdx === 0) onDone?.()
+
+        // Pausa antes de borrar
+        await new Promise((r) => { deleteTimeout = setTimeout(r, 1800) })
+        if (cancelled) return
+
+        // ── Delete ──
+        for (let i = phrase.length - 1; i >= 1 && !cancelled; i--) {
+          setDisplayed(phrase.slice(0, i))
+          await new Promise((r) => { deleteTimeout = setTimeout(r, 10 + Math.random() * 20) })
+        }
+
+        if (cancelled) return
+
+        // Siguiente frase (cíclico)
+        phraseIdx = (phraseIdx + 1) % PHRASES.length
+      }
+    }
+
+    cycle()
+
     return () => {
-      clearInterval(interval)
+      cancelled = true
       clearInterval(cursorInterval)
+      if (typeTimeout) clearTimeout(typeTimeout)
+      if (deleteTimeout) clearTimeout(deleteTimeout)
     }
   }, [reduced, onDone])
 
@@ -329,11 +366,13 @@ function TypedSubtitle({ reduced, onDone }) {
       data-depth="1.2"
     >
       {displayed}
-      <span
-        className={`inline-block w-[2px] h-[1em] bg-primary ml-0.5 align-middle transition-opacity duration-100 ${
-          cursorVisible ? 'opacity-100' : 'opacity-0'
-        }`}
-      />
+      {!reduced && (
+        <span
+          className={`inline-block w-[2px] h-[1em] bg-primary ml-0.5 align-middle transition-opacity duration-100 ${
+            cursorVisible ? 'opacity-100' : 'opacity-0'
+          }`}
+        />
+      )}
     </p>
   )
 }
