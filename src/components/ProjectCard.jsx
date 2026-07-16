@@ -11,7 +11,7 @@ const gradientMeshes = [
   'linear-gradient(135deg, rgba(34,211,238,0.12), rgba(99,102,241,0.08), rgba(34,211,238,0.04))',
 ]
 
-const ProjectCard = forwardRef(function ProjectCard({ project, index = 0 }, ref) {
+const ProjectCard = forwardRef(function ProjectCard({ project, index = 0, onOpen }, ref) {
   const cardRef = useRef(null)
   const tiltRef = useTilt3D({ maxTilt: 6, scale: 1.02, speed: 500 })
   const techs = project.technologies || ['React', 'Node', 'MongoDB']
@@ -122,12 +122,33 @@ const ProjectCard = forwardRef(function ProjectCard({ project, index = 0 }, ref)
     return () => observer.disconnect()
   }, [reduced])
 
+  /* ── Abrir modal al hacer clic en la tarjeta (excepto en enlaces/botones) ── */
+  const handleCardClick = (e) => {
+    // No abrir si se clickeó un enlace o botón (Demo/Código)
+    const interactive = e.target.closest('a, button')
+    if (interactive) return
+    onOpen?.()
+  }
+
+  const handleCardKeyDown = (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      onOpen?.()
+    }
+  }
+
   return (
     <article
       ref={tiltRef}
       data-reveal-delay={index * 100}
-      className="reveal group relative rounded-[1.25rem] rounded-tr-[0.5rem] rounded-bl-[0.5rem] [transform-style:preserve-3d]"
+      className="reveal group relative rounded-[1.25rem] rounded-tr-[0.5rem] rounded-bl-[0.5rem] [transform-style:preserve-3d] cursor-pointer"
       style={{ perspective: '800px' }}
+      onClick={handleCardClick}
+      onKeyDown={handleCardKeyDown}
+      role="button"
+      tabIndex={0}
+      aria-haspopup="dialog"
+      aria-label={`Ver detalle del proyecto: ${project.title}`}
     >
       {/* Gradient border ring on hover */}
       <div

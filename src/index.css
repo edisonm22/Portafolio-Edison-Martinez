@@ -886,3 +886,49 @@ body {
     padding: 1rem;
   }
 }
+
+/* ═══════════════════════════════════════════
+   PROJECT MODAL ANIMATIONS
+   ═══════════════════════════════════════════ */
+
+@keyframes modal-fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes modal-slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-modal-fadeIn {
+  animation: modal-fadeIn 0.25s var(--ease-out-expo) both;
+}
+
+.animate-modal-slideUp {
+  animation: modal-slideUp 0.4s var(--ease-out-expo) both;
+}
+
+/* ── ViewTransition API crossfade fallback ── */
+::view-transition-old(project-modal) {
+  animation: modal-fadeIn 0.15s var(--ease-out-expo) reverse both;
+}
+::view-transition-new(project-modal) {
+  animation: modal-slideUp 0.35s var(--ease-out-expo) both;
+}
+
+html.reduced-motion .animate-modal-fadeIn,
+html.reduced-motion .animate-modal-slideUp {
+  animation-duration: 0.05s;
+}
+
+html.reduced-motion ::view-transition-old(project-modal),
+html.reduced-motion ::view-transition-new(project-modal) {
+  animation-duration: 0.05s;
+}
