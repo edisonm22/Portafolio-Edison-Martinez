@@ -189,7 +189,8 @@ export default function HeroThreeScene({ reduced = false }) {
 
         /* ── 11. Animation loop ── */
         const clock = new THREE.Clock()
-        let scrollOffset = 0
+        let scrollProgress = 0
+        let smoothScrollProgress = 0
 
         // Scroll-linked camera: leer scroll del Hero
         const onScroll = () => {
@@ -198,9 +199,7 @@ export default function HeroThreeScene({ reduced = false }) {
             if (heroRect) {
               const heroHeight = heroRect.height
               const scrolled = -heroRect.top
-              const progress = Math.max(0, Math.min(1, scrolled / heroHeight))
-              // Camera se aleja de z=6 a z=11 al hacer scroll
-              scrollOffset = progress * 5
+              scrollProgress = Math.max(0, Math.min(1, scrolled / heroHeight))
             }
           } catch { /* ignore */ }
         }
@@ -228,8 +227,15 @@ export default function HeroThreeScene({ reduced = false }) {
               knotMat.opacity = 0.6 + Math.sin(elapsed * 0.5) * 0.15
             }
 
-            // ── Scroll-linked camera ──
-            camera.position.z = 6 + scrollOffset
+            // ── Scroll-linked camera (smooth lerp) ──
+            smoothScrollProgress += (scrollProgress - smoothScrollProgress) * 0.06
+            camera.position.z = 6 + smoothScrollProgress * 10  // z=6 → z=16
+
+            // Stars opacity fade on scroll
+            starMat.opacity = (entranceProgress < 1 ? entranceProgress : 1) * (0.4 - smoothScrollProgress * 0.25)
+
+            // Extra rotation from scroll
+            stars.rotation.z = smoothScrollProgress * 0.04
 
             // ── Mouse & auto rotation ──
             mouse.x += (mouse.targetX - mouse.x) * 0.05
