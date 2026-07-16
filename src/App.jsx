@@ -89,10 +89,10 @@ export default function App() {
       <div className="noise-overlay" />
       <main id="main" className="lg:ml-72 min-h-screen pt-16 lg:pt-0 max-w-full overflow-x-hidden">
         <Hero />
-        <Projects />
         <Skills />
-        <Services />
         <ExperienceTimeline />
+        <Projects />
+        <Services />
         <Contact />
       </main>
     </>

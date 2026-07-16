@@ -4,7 +4,7 @@ import { scrollToSection } from '../utils/helpers.js'
 import { useReducedMotion } from '../hooks/useReducedMotion.js'
 import { useMagnetic } from '../hooks/useMagnetic.js'
 
-const SECTION_NUMS = { home: '—', projects: '01', skills: '02', services: '03', contact: '04' }
+const SECTION_NUMS = { home: '—', skills: '01', experience: '02', projects: '03', services: '04', contact: '05' }
 
 export default function Sidebar() {
   const [mobileOpen, setMobileOpen] = useState(false)
