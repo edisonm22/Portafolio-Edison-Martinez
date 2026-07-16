@@ -7,6 +7,7 @@ import Hero from './components/Hero.jsx'
 import Projects from './components/Projects.jsx'
 import Skills from './components/Skills.jsx'
 import Services from './components/Services.jsx'
+import ExperienceTimeline from './components/ExperienceTimeline.jsx'
 import Contact from './components/Contact.jsx'
 
 export default function App() {
@@ -76,6 +77,7 @@ export default function App() {
         <Projects />
         <Skills />
         <Services />
+        <ExperienceTimeline />
         <Contact />
       </main>
     </>
