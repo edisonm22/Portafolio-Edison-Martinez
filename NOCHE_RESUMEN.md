@@ -97,9 +97,11 @@ Nota: Three.js se carga dinámicamente solo en desktop (>=1024px).
    dependencia externa y se carga con dynamic import, pero podría optimizarse
    con tree-shaking o una escena más simple.
 
-3. **Contraste**: text-surface-500 (#64748b) en surface-950 (#0a0f1a) da 4.29:1
+3. ~~**Contraste**: text-surface-500 (#64748b) en surface-950 (#0a0f1a) da 4.29:1
    que está muy cerca pero justo por debajo de 4.5:1 AA. Se reemplazó por
-   surface-400 en la mayoría de casos.
+   surface-400 en la mayoría de casos.~~ ✅ **Resuelto**: todos los casos de
+   `text-surface-5/6/700` fueron reemplazados por `text-surface-400`. Ver
+   commit `ea532af`.
 
 ## Decisiones de diseño
 
