@@ -13,6 +13,7 @@ export default function Sidebar() {
   const reduced = useReducedMotion()
   const githubRef = useRef(null)
   const linkedinRef = useRef(null)
+  const hamburgerRef = useRef(null)
 
   useMagnetic(githubRef, { maxTranslate: 4, lerp: 0.12, maxDist: 100 })
   useMagnetic(linkedinRef, { maxTranslate: 4, lerp: 0.12, maxDist: 100 })
@@ -82,23 +83,50 @@ export default function Sidebar() {
     return () => mq.removeEventListener('change', handler)
   }, [])
 
-  /* ── Escape key + focus trap for mobile menu ── */
+  /* ── Focus trap real + Escape for mobile menu ── */
   useEffect(() => {
     if (!mobileOpen) return
 
+    const menu = document.getElementById('mobile-menu')
+    if (!menu) return
+
+    const focusable = menu.querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])')
+    const first = focusable[0]
+    const last  = focusable[focusable.length - 1]
+
+    // Foco inicial al primer elemento
+    if (first) first.focus()
+
     const handleKey = (e) => {
-      if (e.key === 'Escape') setMobileOpen(false)
+      if (e.key === 'Escape') {
+        setMobileOpen(false)
+        return
+      }
+
+      if (e.key === 'Tab') {
+        const active = document.activeElement
+        if (e.shiftKey) {
+          // Shift+Tab: si estamos en el primero, ir al último
+          if (active === first || !focusable.length) {
+            e.preventDefault()
+            if (last) last.focus()
+          }
+        } else {
+          // Tab: si estamos en el último, volver al primero
+          if (active === last || !focusable.length) {
+            e.preventDefault()
+            if (first) first.focus()
+          }
+        }
+      }
     }
     document.addEventListener('keydown', handleKey)
 
-    // Focus trap: mantener foco dentro del menú
-    const menu = document.getElementById('mobile-menu')
-    if (menu) {
-      const focusable = menu.querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])')
-      if (focusable.length > 0) focusable[0].focus()
+    return () => {
+      document.removeEventListener('keydown', handleKey)
+      // Restaurar foco al botón hamburguesa
+      hamburgerRef.current?.focus()
     }
-
-    return () => document.removeEventListener('keydown', handleKey)
   }, [mobileOpen])
 
   const handleNav = (id) => {
@@ -238,6 +266,7 @@ export default function Sidebar() {
         </a>
 
         <button
+          ref={hamburgerRef}
           onClick={() => setMobileOpen(!mobileOpen)}
           className="relative w-12 h-12 flex items-center justify-center rounded-xl bg-surface-900 border border-surface-800 text-surface-400 hover:text-primary hover:border-primary/40 transition-all"
           aria-expanded={mobileOpen}
