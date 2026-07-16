@@ -2,6 +2,8 @@ import { useScrollReveal } from '../hooks/useScrollReveal.js'
 import { useTilt3D } from '../hooks/useTilt3D.js'
 import { SectionWrapper } from './SectionWrapper.jsx'
 import SkillBar from './SkillBar.jsx'
+import CodeShowcase from './CodeShowcase.jsx'
+import { useReducedMotion } from '../hooks/useReducedMotion.js'
 import { skillCategories } from '../data/skills.js'
 
 function SkeletonSkillBar() {
@@ -20,6 +22,7 @@ function SkeletonSkillBar() {
 
 export default function Skills({ loading = false }) {
   const sectionRef = useScrollReveal()
+  const reduced = useReducedMotion()
   const tilt0 = useTilt3D({ maxTilt: 4, scale: 1.01, speed: 400, glare: false })
   const tilt1 = useTilt3D({ maxTilt: 4, scale: 1.01, speed: 400, glare: false })
   const tilt2 = useTilt3D({ maxTilt: 4, scale: 1.01, speed: 400, glare: false })
@@ -85,6 +88,11 @@ export default function Skills({ loading = false }) {
             </div>
           </article>
         ))}
+      </div>
+
+      {/* ── Code showcase ── */}
+      <div className="mt-10 lg:mt-14 max-w-3xl mx-auto reveal" data-reveal-delay="400">
+        <CodeShowcase reduced={reduced} />
       </div>
     </SectionWrapper>
   )
