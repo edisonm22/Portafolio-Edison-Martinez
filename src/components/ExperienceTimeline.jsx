@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useReducedMotion } from '../hooks/useReducedMotion.js'
-import { useScrollReveal } from '../hooks/useScrollReveal.js'
+import { SectionWrapper } from './SectionWrapper.jsx'
 
 const MILESTONES = [
   {
@@ -35,7 +35,6 @@ const MILESTONES = [
  * dentro de la sección.
  */
 export default function ExperienceTimeline() {
-  const sectionRef = useScrollReveal()
   const reduced = useReducedMotion()
   const [lineProgress, setLineProgress] = useState(0)
   const lineRef = useRef(null)
@@ -94,24 +93,13 @@ export default function ExperienceTimeline() {
   }, [])
 
   return (
-    <section
+    <SectionWrapper
       id="experience"
-      className="section-grid-bg relative py-section-mobile lg:py-section px-6 sm:px-8 lg:px-12 overflow-hidden"
+      sectionNum="02"
+      title="Experiencia"
+      eyebrow="TRAYECTORIA"
+      subtitle="Hitos profesionales que han marcado mi camino como desarrollador."
     >
-      <div className="section-divider mb-8 lg:mb-12" />
-
-      {/* Cabecera */}
-      <div className="relative z-10 mb-8 lg:mb-12" ref={sectionRef}>
-        <span className="font-mono text-caption text-primary tracking-[0.15em] uppercase">
-          — Trayectoria
-        </span>
-        <h2 className="text-h2 text-light mt-2 font-display">
-          Experiencia
-        </h2>
-        <p className="text-muted text-body-sm mt-3 leading-relaxed" style={{ maxWidth: '65ch' }}>
-          Hitos profesionales que han marcado mi camino como desarrollador.
-        </p>
-      </div>
 
       {/* Timeline */}
       <div ref={containerRef} className="relative z-10 max-w-4xl mx-auto">
@@ -193,6 +181,6 @@ export default function ExperienceTimeline() {
 
       {/* Blur fade bottom */}
       <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-surface-950 to-transparent pointer-events-none z-20" />
-    </section>
+    </SectionWrapper>
   )
 }

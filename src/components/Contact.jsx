@@ -123,7 +123,7 @@ export default function Contact() {
   return (
     <SectionWrapper
       id="contact"
-      sectionNum="04"
+      sectionNum="05"
       title="Contacto"
       eyebrow="CONTACTO"
       subtitle="Hablemos sobre tu próximo proyecto"

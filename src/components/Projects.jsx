@@ -54,7 +54,7 @@ export default function Projects({ projects = FALLBACK_PROJECTS, loading = false
 
   if (loading) {
     return (
-      <SectionWrapper id="projects" sectionNum="01" title="Proyectos" eyebrow="PORTAFOLIO" subtitle="Trabajos seleccionados que reflejan mi experiencia">
+      <SectionWrapper id="projects" sectionNum="03" title="Proyectos" eyebrow="PORTAFOLIO" subtitle="Trabajos seleccionados que reflejan mi experiencia">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3].map((i) => <SkeletonCard key={i} />)}
         </div>
@@ -65,7 +65,7 @@ export default function Projects({ projects = FALLBACK_PROJECTS, loading = false
   return (
     <SectionWrapper
       id="projects"
-      sectionNum="01"
+      sectionNum="03"
       title="Proyectos"
       eyebrow="PORTAFOLIO"
       subtitle="Trabajos seleccionados que reflejan mi experiencia"

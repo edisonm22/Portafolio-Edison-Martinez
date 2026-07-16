@@ -30,7 +30,7 @@ export default function Skills({ loading = false }) {
 
   if (loading) {
     return (
-      <SectionWrapper id="skills" sectionNum="02" title="Stack Técnico" eyebrow="STACK TÉCNICO" subtitle="Tecnologías con las que construyo productos digitales">
+      <SectionWrapper id="skills" sectionNum="01" title="Stack Técnico" eyebrow="STACK TÉCNICO" subtitle="Tecnologías con las que construyo productos digitales">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {[1, 2, 3].map((cat) => (
             <div key={cat} className="bg-surface-900 border border-surface-800 rounded-2xl p-6 space-y-5">
@@ -52,7 +52,7 @@ export default function Skills({ loading = false }) {
   return (
     <SectionWrapper
       id="skills"
-      sectionNum="02"
+      sectionNum="01"
       title="Stack Técnico"
       eyebrow="STACK TÉCNICO"
       subtitle="Tecnologías con las que construyo productos digitales"

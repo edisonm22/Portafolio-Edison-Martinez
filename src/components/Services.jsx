@@ -23,7 +23,7 @@ export default function Services() {
   return (
     <SectionWrapper
       id="services"
-      sectionNum="03"
+      sectionNum="04"
       title="Servicios"
       eyebrow="SERVICIOS"
       subtitle="Soluciones integrales para tu proyecto digital"
