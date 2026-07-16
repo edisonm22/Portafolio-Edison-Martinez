@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
-import { useReducedMotion } from '../hooks/useReducedMotion.js'
-import { useMagnetic } from '../hooks/useMagnetic.js'
-import { useScrollReveal } from '../hooks/useScrollReveal.js'
-import HeroThreeScene from './HeroThreeScene.jsx'
-import InteractiveTerminal from './InteractiveTerminal.jsx'
-import CounterValue from './CounterValue.jsx'
+import { useReducedMotion } from '../../hooks/useReducedMotion.js'
+import { useMagnetic } from '../../hooks/useMagnetic.js'
+import { useScrollReveal } from '../../hooks/useScrollReveal.js'
+import HeroThreeScene from '../effects/HeroThreeScene.jsx'
+import InteractiveTerminal from '../ui/InteractiveTerminal.jsx'
+import CounterValue from '../ui/CounterValue.jsx'
 
 export default function Hero() {
   const revealRef = useScrollReveal()

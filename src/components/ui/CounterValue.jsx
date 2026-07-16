@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useReducedMotion } from '../hooks/useReducedMotion.js'
+import { useReducedMotion } from '../../hooks/useReducedMotion.js'
 
 /**
  * CounterValue — Contador animado que incrementa de 0 a target.

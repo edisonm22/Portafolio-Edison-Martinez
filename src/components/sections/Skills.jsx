@@ -1,10 +1,10 @@
-import { useScrollReveal } from '../hooks/useScrollReveal.js'
-import { useTilt3D } from '../hooks/useTilt3D.js'
-import { SectionWrapper } from './SectionWrapper.jsx'
-import SkillBar from './SkillBar.jsx'
-import CodeShowcase from './CodeShowcase.jsx'
-import { useReducedMotion } from '../hooks/useReducedMotion.js'
-import { skillCategories } from '../data/skills.js'
+import { useScrollReveal } from '../../hooks/useScrollReveal.js'
+import { useTilt3D } from '../../hooks/useTilt3D.js'
+import { SectionWrapper } from '../layout/SectionWrapper.jsx'
+import SkillBar from '../ui/SkillBar.jsx'
+import CodeShowcase from '../ui/CodeShowcase.jsx'
+import { useReducedMotion } from '../../hooks/useReducedMotion.js'
+import { skillCategories } from '../../data/skills.js'
 
 function SkeletonSkillBar() {
   return (

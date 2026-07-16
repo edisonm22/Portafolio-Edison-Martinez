@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { reducedMotionNow } from '../hooks/useReducedMotion.js'
-import { preloadThree } from '../utils/threePreloader.js'
+import { reducedMotionNow } from '../../hooks/useReducedMotion.js'
+import { preloadThree } from '../../utils/threePreloader.js'
 
 const STAGES = { ENTERING: 0, VISIBLE: 1, EXITING: 2, DONE: 3 }
 

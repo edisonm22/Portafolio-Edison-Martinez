@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState } from 'react'
-import { useReducedMotion } from '../hooks/useReducedMotion.js'
+import { useReducedMotion } from '../../hooks/useReducedMotion.js'
 
 /* ── Snippet de 18 líneas: React + Node real-world component ── */
 const CODE_LINES = [

@@ -1,9 +1,9 @@
 import { useRef, useEffect } from 'react'
-import { useScrollReveal } from '../hooks/useScrollReveal.js'
-import { useTilt3D } from '../hooks/useTilt3D.js'
-import { useReducedMotion } from '../hooks/useReducedMotion.js'
-import { SectionWrapper } from './SectionWrapper.jsx'
-import { services } from '../data/services.js'
+import { useScrollReveal } from '../../hooks/useScrollReveal.js'
+import { useTilt3D } from '../../hooks/useTilt3D.js'
+import { useReducedMotion } from '../../hooks/useReducedMotion.js'
+import { SectionWrapper } from '../layout/SectionWrapper.jsx'
+import { services } from '../../data/services.js'
 
 const gradientAccents = [
   'from-primary/20 to-accent/10',

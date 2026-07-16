@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { useReducedMotion } from '../hooks/useReducedMotion.js'
-import { SectionWrapper } from './SectionWrapper.jsx'
+import { useReducedMotion } from '../../hooks/useReducedMotion.js'
+import { SectionWrapper } from '../layout/SectionWrapper.jsx'
 
 const MILESTONES = [
   {

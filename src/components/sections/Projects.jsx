@@ -1,10 +1,10 @@
 import { useState, useCallback } from 'react'
 import { flushSync } from 'react-dom'
-import { useScrollReveal } from '../hooks/useScrollReveal.js'
-import { ProjectCard } from './ProjectCard.jsx'
-import { FALLBACK_PROJECTS } from '../data/projects.js'
-import { SectionWrapper } from './SectionWrapper.jsx'
-import ProjectModal from './ProjectModal.jsx'
+import { useScrollReveal } from '../../hooks/useScrollReveal.js'
+import { ProjectCard } from '../ui/ProjectCard.jsx'
+import { FALLBACK_PROJECTS } from '../../data/projects.js'
+import { SectionWrapper } from '../layout/SectionWrapper.jsx'
+import ProjectModal from '../ui/ProjectModal.jsx'
 
 function SkeletonCard() {
   return (

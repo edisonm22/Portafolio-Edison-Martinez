@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
-import { navItems } from '../data/navData.js'
-import { scrollToSection } from '../utils/helpers.js'
-import { useReducedMotion } from '../hooks/useReducedMotion.js'
-import { useMagnetic } from '../hooks/useMagnetic.js'
+import { navItems } from '../../data/navData.js'
+import { scrollToSection } from '../../utils/helpers.js'
+import { useReducedMotion } from '../../hooks/useReducedMotion.js'
+import { useMagnetic } from '../../hooks/useMagnetic.js'
 
 const SECTION_NUMS = { home: '—', skills: '01', experience: '02', projects: '03', services: '04', contact: '05' }
 

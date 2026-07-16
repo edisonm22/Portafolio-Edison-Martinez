@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
-import { SectionWrapper } from './SectionWrapper.jsx'
-import { useScrollReveal } from '../hooks/useScrollReveal.js'
-import { useMagnetic } from '../hooks/useMagnetic.js'
+import { SectionWrapper } from '../layout/SectionWrapper.jsx'
+import { useScrollReveal } from '../../hooks/useScrollReveal.js'
+import { useMagnetic } from '../../hooks/useMagnetic.js'
 
 /* ============================================================
    CONSTANTS — NO modifiques con datos personales reales

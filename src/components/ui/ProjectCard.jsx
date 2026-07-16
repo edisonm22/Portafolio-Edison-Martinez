@@ -1,7 +1,7 @@
 import { forwardRef, useRef, useEffect } from 'react'
-import { getTechColor } from '../utils/techColors.js'
-import { useTilt3D } from '../hooks/useTilt3D.js'
-import { useReducedMotion } from '../hooks/useReducedMotion.js'
+import { getTechColor } from '../../utils/techColors.js'
+import { useTilt3D } from '../../hooks/useTilt3D.js'
+import { useReducedMotion } from '../../hooks/useReducedMotion.js'
 
 const gradientMeshes = [
   'linear-gradient(135deg, rgba(14,165,233,0.12), rgba(168,85,247,0.08), rgba(14,165,233,0.04))',

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { getThreeModule } from '../utils/threePreloader.js'
+import { getThreeModule } from '../../utils/threePreloader.js'
 
 /**
  * HeroThreeScene — Único sistema 3D del Hero.

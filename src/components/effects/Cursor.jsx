@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useReducedMotion } from '../hooks/useReducedMotion.js'
+import { useReducedMotion } from '../../hooks/useReducedMotion.js'
 
 /**
  * Puntito decorativo que sigue al ratón.

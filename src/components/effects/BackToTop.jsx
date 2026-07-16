@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
-import { useReducedMotion } from '../hooks/useReducedMotion.js'
+import { useReducedMotion } from '../../hooks/useReducedMotion.js'
 
 /**
  * BackToTop — Botón flotante en esquina inferior‑derecha.

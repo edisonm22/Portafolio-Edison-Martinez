@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { flushSync } from 'react-dom'
-import { getTechColor } from '../utils/techColors.js'
+import { getTechColor } from '../../utils/techColors.js'
 
 /**
  * ProjectModal — Modal de proyecto con shared‑element transition,
