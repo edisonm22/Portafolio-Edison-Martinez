@@ -3,6 +3,7 @@ import Lenis from 'lenis'
 import Sidebar from './components/Sidebar.jsx'
 import Loader from './components/Loader.jsx'
 import Cursor from './components/Cursor.jsx'
+import BackToTop from './components/BackToTop.jsx'
 import Hero from './components/Hero.jsx'
 import Projects from './components/Projects.jsx'
 import Skills from './components/Skills.jsx'
@@ -70,6 +71,7 @@ export default function App() {
       {!loaderDone && <Loader onFinish={() => setLoaderDone(true)} />}
       <Sidebar />
       <Cursor />
+      <BackToTop />
       <SkipLink />
       <div className="noise-overlay" />
       <main id="main" className="lg:ml-72 min-h-screen pt-16 lg:pt-0 max-w-full overflow-x-hidden">
