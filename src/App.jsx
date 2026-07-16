@@ -1,15 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import Lenis from 'lenis'
-import Sidebar from './components/Sidebar.jsx'
-import Loader from './components/Loader.jsx'
-import Cursor from './components/Cursor.jsx'
-import BackToTop from './components/BackToTop.jsx'
-import Hero from './components/Hero.jsx'
-import Projects from './components/Projects.jsx'
-import Skills from './components/Skills.jsx'
-import Services from './components/Services.jsx'
-import ExperienceTimeline from './components/ExperienceTimeline.jsx'
-import Contact from './components/Contact.jsx'
+import { Sidebar } from './components/layout/index.js'
+import { Loader, Cursor, BackToTop } from './components/effects/index.js'
+import { Hero, Projects, Skills, Services, ExperienceTimeline, Contact } from './components/sections/index.js'
 
 export default function App() {
   const [loaderDone, setLoaderDone] = useState(false)
