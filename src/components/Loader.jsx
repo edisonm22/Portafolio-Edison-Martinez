@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { reducedMotionNow } from '../hooks/useReducedMotion.js'
+import { preloadThree } from '../utils/threePreloader.js'
 
 const STAGES = { ENTERING: 0, VISIBLE: 1, EXITING: 2, DONE: 3 }
 
@@ -21,7 +22,11 @@ export default function Loader({ onFinish }) {
     const t = reduced ? REDUCED : NORMAL
 
     const t1 = setTimeout(() => setStage(STAGES.VISIBLE), t.enter)
-    const t2 = setTimeout(() => setStage(STAGES.EXITING), t.enter + t.hold)
+    const t2 = setTimeout(() => {
+      setStage(STAGES.EXITING)
+      // Comenzar precarga de Three.js mientras el loader se desvanece
+      preloadThree()
+    }, t.enter + t.hold)
     const t3 = setTimeout(() => {
       sessionStorage.setItem('loader-seen', 'true')
       setStage(STAGES.DONE)

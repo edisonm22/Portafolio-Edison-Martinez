@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { getThreeModule } from '../utils/threePreloader.js'
 
 /**
  * HeroThreeScene — Único sistema 3D del Hero.
@@ -57,8 +58,8 @@ export default function HeroThreeScene({ reduced = false }) {
           return
         }
 
-        /* ── 3. Cargar Three.js dinámicamente ── */
-        const THREE = await import('three')
+        /* ── 3. Obtener Three.js (precargado desde Loader si es posible) ── */
+        const THREE = await getThreeModule()
         if (!mounted) return
 
         /* ── 4. Setup Scene ── */
