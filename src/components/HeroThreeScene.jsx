@@ -24,6 +24,26 @@ export default function HeroThreeScene({ reduced = false }) {
     let rafId = null
     let cleanup = () => {}
 
+    /* ── Device tier detection ── */
+    function getDeviceTier() {
+      const cores = navigator.hardwareConcurrency || 4
+      const width = window.innerWidth
+      // Low: <=4 cores or <1280px viewport
+      if (cores <= 4 || width < 1280) return 'low'
+      // Medium: 6-8 cores or laptop-class screen
+      if (cores <= 8 || width < 1600) return 'medium'
+      return 'high'
+    }
+    const tier = getDeviceTier()
+
+    // Geometry budget per tier
+    const TIER_CONFIG = {
+      low:  { stars: 150, knotSegments: 64, knotTube: 8, inner: 30, pixelRatio: 1, autoRotate: 0.06 },
+      medium: { stars: 250, knotSegments: 100, knotTube: 12, inner: 50, pixelRatio: 1.5, autoRotate: 0.07 },
+      high: { stars: 400, knotSegments: 140, knotTube: 16, inner: 80, pixelRatio: 2, autoRotate: 0.08 },
+    }
+    const cfg = TIER_CONFIG[tier]
+
     async function init() {
       try {
         /* ── 1. Detectar WebGL antes de hacer nada ── */
@@ -68,9 +88,9 @@ export default function HeroThreeScene({ reduced = false }) {
         const camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 1000)
         camera.position.z = 6
 
-        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true })
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: tier !== 'low' })
         renderer.setSize(w, h)
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, cfg.pixelRatio))
         renderer.setClearColor(0x0a0f1a, 0)
         container.appendChild(renderer.domElement)
 
@@ -78,8 +98,8 @@ export default function HeroThreeScene({ reduced = false }) {
         const ENTRANCE_DURATION = 1.5 // segundos
         let entranceProgress = 0
 
-        /* ── 5. Starfield (400 estrellas) ── */
-        const starCount = 400
+        /* ── 5. Starfield (según tier) ── */
+        const starCount = cfg.stars
         const starGeo = new THREE.BufferGeometry()
         const starPos = new Float32Array(starCount * 3)
         for (let i = 0; i < starCount * 3; i += 3) {
@@ -99,8 +119,8 @@ export default function HeroThreeScene({ reduced = false }) {
         const stars = new THREE.Points(starGeo, starMat)
         scene.add(stars)
 
-        /* ── 6. Torus Knot (geometría reducida: 140 segmentos en vez de 180) ── */
-        const knotGeo = new THREE.TorusKnotGeometry(1.2, 0.35, 140, 16)
+        /* ── 6. Torus Knot (geometría según tier) ── */
+        const knotGeo = new THREE.TorusKnotGeometry(1.2, 0.35, cfg.knotSegments, cfg.knotTube)
         const knotPos = knotGeo.attributes.position
         const colors = new Float32Array(knotPos.count * 3)
         for (let i = 0; i < knotPos.count; i++) {
@@ -120,8 +140,8 @@ export default function HeroThreeScene({ reduced = false }) {
         knot.position.y = 0.2
         scene.add(knot)
 
-        /* ── 7. Wireframe overlay ── */
-        const wireGeo = new THREE.TorusKnotGeometry(1.2, 0.35, 90, 10)
+        /* ── 7. Wireframe overlay (según tier) ── */
+        const wireGeo = new THREE.TorusKnotGeometry(1.2, 0.35, Math.round(cfg.knotSegments * 0.65), Math.round(cfg.knotTube * 0.6))
         const edges = new THREE.EdgesGeometry(wireGeo)
         const wireMat = new THREE.LineBasicMaterial({
           color: 0x0ea5e9, transparent: true, opacity: 0.08,
@@ -131,8 +151,8 @@ export default function HeroThreeScene({ reduced = false }) {
         wireframe.position.y = 0.2
         scene.add(wireframe)
 
-        /* ── 8. Inner glow particles (80 en vez de 120) ── */
-        const innerCount = 80
+        /* ── 8. Inner glow particles (según tier) ── */
+        const innerCount = cfg.inner
         const innerGeo = new THREE.BufferGeometry()
         const innerPos = new Float32Array(innerCount * 3)
         for (let i = 0; i < innerCount * 3; i += 3) {
@@ -241,7 +261,7 @@ export default function HeroThreeScene({ reduced = false }) {
             // ── Mouse & auto rotation ──
             mouse.x += (mouse.targetX - mouse.x) * 0.05
             mouse.y += (mouse.targetY - mouse.y) * 0.05
-            const autoRotY = elapsed * 0.08
+            const autoRotY = elapsed * cfg.autoRotate
             const autoRotX = elapsed * 0.03
             knot.rotation.x = autoRotX + mouse.y * 0.4
             knot.rotation.y = autoRotY + mouse.x * 0.6
