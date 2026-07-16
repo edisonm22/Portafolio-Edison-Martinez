@@ -4,14 +4,13 @@ import { useMagnetic } from '../hooks/useMagnetic.js'
 import { useScrollReveal } from '../hooks/useScrollReveal.js'
 import HeroThreeScene from './HeroThreeScene.jsx'
 import InteractiveTerminal from './InteractiveTerminal.jsx'
+import CounterValue from './CounterValue.jsx'
 
 export default function Hero() {
   const revealRef = useScrollReveal()
   const reduced = useReducedMotion()
   const ctaRef = useRef(null)
   const projectsRef = useRef(null)
-  const [countersVisible, setCountersVisible] = useState(false)
-  const countersRef = useRef(null)
   const [wordRevealDone, setWordRevealDone] = useState(false)
   const [showScrollIndicator, setShowScrollIndicator] = useState(false)
 
@@ -51,23 +50,6 @@ export default function Hero() {
       window.removeEventListener('lenis-scroll', onScroll)
     }
   }, [reduced])
-
-  /* ── Animated counters al entrar en viewport ── */
-  useEffect(() => {
-    const el = countersRef.current
-    if (!el) return
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setCountersVisible(true)
-          obs.unobserve(el)
-        }
-      },
-      { threshold: 0.3 }
-    )
-    obs.observe(el)
-    return () => obs.disconnect()
-  }, [])
 
   /* ── Parallax sutil en los blobs ── */
   useEffect(() => {
@@ -267,24 +249,22 @@ export default function Hero() {
         </div>
 
         {/* Stats with animated counters */}
-        <div
-          ref={countersRef}
-          className="mt-12 sm:mt-14 flex flex-wrap items-center gap-x-8 gap-y-3 font-mono text-sm reveal"
+        <div className="mt-12 sm:mt-14 flex flex-wrap items-center gap-x-8 gap-y-3 font-mono text-sm reveal"
           data-reveal-delay="450"
         >
           <div>
-            <CounterValue target={5} suffix="+" visible={countersVisible} />
+            <CounterValue target={5} suffix="+" />
             <span className="text-surface-400 ml-2">a&ntilde;os exp.</span>
           </div>
           <span className="hidden sm:block w-px h-4 bg-surface-800" />
           <div className="w-full sm:w-auto h-px sm:hidden bg-surface-800" />
           <div>
-            <CounterValue target={15} suffix="+" visible={countersVisible} />
+            <CounterValue target={15} suffix="+" />
             <span className="text-surface-400 ml-2">proyectos</span>
           </div>
           <span className="hidden sm:block w-px h-4 bg-surface-800" />
           <div>
-            <CounterValue target={100} suffix="%" visible={countersVisible} />
+            <CounterValue target={100} suffix="%" />
             <span className="text-surface-400 ml-2">satisf.</span>
           </div>
         </div>
@@ -358,39 +338,4 @@ function TypedSubtitle({ reduced, onDone }) {
   )
 }
 
-/* ── Animated counter component ── */
-function CounterValue({ target, suffix, visible }) {
-  const [value, setValue] = useState(0)
-  const animated = useRef(false)
 
-  useEffect(() => {
-    if (!visible || animated.current) return
-    animated.current = true
-
-    // Si prefiere animaciones reducidas, mostrar valor final inmediatamente
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setValue(target)
-      return
-    }
-
-    const duration = 1200
-    const start = performance.now()
-
-    const update = (now) => {
-      const elapsed = now - start
-      const progress = Math.min(1, elapsed / duration)
-      // Ease-out quad
-      const eased = 1 - Math.pow(1 - progress, 2)
-      setValue(Math.round(eased * target))
-      if (progress < 1) requestAnimationFrame(update)
-    }
-
-    requestAnimationFrame(update)
-  }, [visible, target])
-
-  return (
-    <span className="font-bold text-light text-lg tabular-nums">
-      {value}{suffix}
-    </span>
-  )
-}
