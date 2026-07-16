@@ -164,7 +164,7 @@ export default function Hero() {
 
       <div className="relative z-10 max-w-[65ch]">
         <span
-          className="font-mono text-[13px] text-primary tracking-[0.15em] uppercase mb-6 block reveal"
+          className="font-mono text-caption text-primary tracking-[0.15em] uppercase mb-6 block reveal"
           data-reveal-delay="0"
           data-depth="2"
         >
