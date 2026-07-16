@@ -266,11 +266,8 @@ body {
   transform: translateY(0) scale(1);
 }
 .reveal[data-reveal-delay] {
-  transition-delay: calc(var(--reveal-delay, 0) * 1ms);
-}
-
-.reveal[data-reveal-delay] {
   transform: translateY(var(--reveal-distance, 40px)) scale(0.97);
+  transition-delay: calc(var(--reveal-delay, 0) * 1ms);
 }
 .reveal.is-visible[data-reveal-delay] {
   transform: translateY(0) scale(1);
