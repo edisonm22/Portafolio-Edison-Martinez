@@ -47,7 +47,20 @@ export default function App() {
     return () => lenis.destroy()
   }, [])
 
-  /* ── Section title parallax ── */
+  /* ── NOTA: Página 404
+ * Este portafolio es una SPA de una sola página sin React Router ni
+ * sistema de rutas cliente. La navegación usa anclas (#home, #projects…)
+ * que desplazan suavemente a cada sección. No existe una ruta /404.
+ *
+ * Si el usuario navega a una URL que no existe, el servidor (GitHub Pages)
+ * devuelve su propia página 404 estática. No es necesario un componente
+ * NotFound.jsx dentro de la aplicación.
+ *
+ * Para futura referencia: si se añade React Router, crear NotFound.jsx
+ * con un efecto animado (CSS 3D o Three.js) y un enlace "Volver al inicio".
+ */
+
+/* ── Section title parallax ── */
   useEffect(() => {
     const handleScroll = () => {
       const titles = document.querySelectorAll('[data-parallax-speed]')
